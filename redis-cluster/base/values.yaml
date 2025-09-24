@@ -1,24 +1,32 @@
-architecture: cluster
-
-auth:
-  enabled: true
-  existingSecret: redis-password
-  existingSecretPasswordKey: redis-password
-
-cluster:
-  enabled: true
-  slaveCount: 1    # each master will have 1 replica
-
-replica:
-  replicaCount: 3  # ensures at least 3 masters
-
-persistence:
-  enabled: true
-  size: 8Gi
-  storageClass: gp2   # change for your cluster’s encrypted SC
-
-service:
-  type: ClusterIP
-
-tls:
-  enabled: false   # set to true if TLS required
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: redis-cluster
+  namespace: argocd
+spec:
+  project: platform-tools
+  source:
+    repoURL: https://charts.bitnami.com/bitnami
+    chart: redis
+    targetRevision: 19.0.1   # ✅ pick a stable version
+    helm:
+      releaseName: redis-cluster
+      values: |
+        architecture: cluster
+        cluster:
+          nodes: 6  # 3 masters + 3 replicas
+        auth:
+          enabled: true
+          password: redispassword  # ✅ change to secret in real setup
+        persistence:
+          enabled: true
+          size: 8Gi
+        networkPolicy:
+          enabled: true
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: redis-cluster
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
