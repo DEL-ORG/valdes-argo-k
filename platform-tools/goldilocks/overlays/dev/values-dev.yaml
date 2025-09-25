@@ -3,11 +3,15 @@ dashboard:
     enabled: true
     className: nginx
     hosts:
-      - goldilocks-dev.example.com
+      - host: goldilocks.example.com
+        paths:
+          - path: /
+            pathType: ImplementationSpecific
     tls:
-      - secretName: goldilocks-dev-tls
+      - secretName: goldilocks-tls
         hosts:
-          - goldilocks-dev.example.com
+          - goldilocks.example.com
+
 
 controller:
   namespaces:
