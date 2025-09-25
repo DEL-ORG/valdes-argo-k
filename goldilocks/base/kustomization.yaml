@@ -5,10 +5,4 @@ namespace: goldilocks
 resources:
   - namespace.yaml
 
-helmCharts:
-  - name: goldilocks
-    repo: https://charts.fairwinds.com/stable
-    version: 8.0.2   # pin to a stable version
-    releaseName: goldilocks
-    namespace: goldilocks
-    valuesFile: values.yaml
+
