@@ -1,0 +1,39 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: redis-cluster
+  namespace: argocd
+spec:
+  project: platform-tools
+  destination:
+    namespace: redis-cluster
+    server: https://kubernetes.default.svc
+  source:
+    repoURL: https://charts.bitnami.com/bitnami
+    targetRevision: 19.5.0   # update to latest stable
+    chart: redis
+    helm:
+      values: |
+        architecture: "cluster"
+        cluster:
+          nodes: 6           # 3 masters + 3 replicas
+        replica:
+          replicaCount: 1
+        auth:
+          enabled: true
+          existingSecret: redis-auth
+        persistence:
+          enabled: true
+          size: 8Gi
+        service:
+          type: ClusterIP
+          headless:
+            annotations: {}
+        tls:
+          enabled: false      # change to true if TLS required
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
