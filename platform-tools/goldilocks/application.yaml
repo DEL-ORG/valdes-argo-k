@@ -9,6 +9,7 @@ spec:
     repoURL: https://github.com/DEL-ORG/valdes-argo-k.git
     targetRevision: main
     path: platform-tools/goldilocks/overlays/prod
+    plugin: {} # optional, ArgoCD auto-detects kustomize
   destination:
     server: https://kubernetes.default.svc
     namespace: goldilocks
@@ -16,4 +17,5 @@ spec:
     automated:
       prune: true
       selfHeal: true
+
 
