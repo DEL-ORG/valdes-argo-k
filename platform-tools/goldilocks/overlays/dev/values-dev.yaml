@@ -1,0 +1,14 @@
+dashboard:
+  ingress:
+    enabled: true
+    className: nginx
+    hosts:
+      - goldilocks-dev.example.com
+    tls:
+      - secretName: goldilocks-dev-tls
+        hosts:
+          - goldilocks-dev.example.com
+
+controller:
+  namespaces:
+    - dev

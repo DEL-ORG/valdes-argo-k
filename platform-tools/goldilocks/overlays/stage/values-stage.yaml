@@ -1,0 +1,14 @@
+dashboard:
+  ingress:
+    enabled: true
+    className: nginx
+    hosts:
+      - goldilocks-stage.example.com
+    tls:
+      - secretName: goldilocks-stage-tls
+        hosts:
+          - goldilocks-stage.example.com
+
+controller:
+  namespaces:
+    - stage

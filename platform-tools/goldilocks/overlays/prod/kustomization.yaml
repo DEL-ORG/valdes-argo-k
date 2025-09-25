@@ -1,0 +1,13 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+bases:
+  - ../../base
+
+helmCharts:
+  - name: goldilocks
+    repo: https://charts.fairwinds.com/stable
+    version: 6.6.1
+    releaseName: goldilocks
+    namespace: goldilocks
+    valuesFile: values-prod.yaml

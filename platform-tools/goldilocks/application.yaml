@@ -1,0 +1,22 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: goldilocks
+  namespace: argocd
+spec:
+  project: platform-tools
+  source:
+    repoURL: https://charts.fairwinds.com/stable
+    chart: goldilocks
+    targetRevision: 6.6.1   # check latest version
+    helm:
+      releaseName: goldilocks
+      valueFiles:
+        - base/values.yaml
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: goldilocks
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
