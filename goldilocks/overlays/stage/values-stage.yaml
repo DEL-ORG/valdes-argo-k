@@ -1,0 +1,11 @@
+controller:
+  replicaCount: 2   # higher than dev for redundancy
+
+dashboard:
+  enabled: true
+  service:
+    type: ClusterIP   # no external exposure, only internal access via port-forward or ingress
+
+vpa:
+  namespaces:
+    - stage

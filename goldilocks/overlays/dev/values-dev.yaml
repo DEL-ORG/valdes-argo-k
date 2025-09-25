@@ -1,0 +1,8 @@
+controller:
+  replicaCount: 1
+
+dashboard:
+  enabled: true
+  service:
+    type: NodePort
+    nodePort: 30080

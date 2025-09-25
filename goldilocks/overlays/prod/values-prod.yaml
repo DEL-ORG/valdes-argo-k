@@ -1,0 +1,22 @@
+controller:
+  replicaCount: 3   # ensure HA in production
+
+dashboard:
+  enabled: true
+  service:
+    type: ClusterIP
+    port: 80
+
+# Secure with ingress
+ingress:
+  enabled: true
+  hosts:
+    - goldilocks.prod.example.com
+  tls:
+    - hosts:
+        - goldilocks.prod.example.com
+      secretName: goldilocks-tls
+
+vpa:
+  namespaces:
+    - prod
