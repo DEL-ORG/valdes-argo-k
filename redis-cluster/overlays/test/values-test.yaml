@@ -1,0 +1,9 @@
+persistence:
+  size: 5Gi
+
+cluster:
+  nodes: 4
+  replicas: 1
+
+tls:
+  enabled: false
