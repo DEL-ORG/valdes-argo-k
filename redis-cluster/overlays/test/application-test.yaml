@@ -1,0 +1,20 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: redis-cluster-test
+  namespace: argocd
+spec:
+  project: platform-tools
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: redis-cluster
+  source:
+    repoURL: https://github.com/DEL-ORG/valdes-argo-k.git
+    targetRevision: main
+    path: redis-cluster/overlays/test
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
