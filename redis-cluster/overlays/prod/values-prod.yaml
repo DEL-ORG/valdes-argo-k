@@ -1,4 +1,4 @@
-architecture: cluster
+architecture: replication
 cluster:
   nodes: 6
   replicas: 1
