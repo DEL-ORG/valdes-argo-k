@@ -1,5 +1,4 @@
 resources:
-  - application.yaml
   - redis-secret.yaml
   - networkpolicy.yaml
 configMapGenerator:
