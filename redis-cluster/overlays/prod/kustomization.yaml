@@ -1,5 +1,13 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+helmCharts:
+  - name: redis
+    repo: https://charts.bitnami.com/bitnami
+    version: 19.6.2
+    releaseName: redis-cluster
+    namespace: redis-cluster
+    valuesFile: values-prod.yaml
+
 resources:
   - ../../base
-
-patchesStrategicMerge:
-  - values-prod.yaml
