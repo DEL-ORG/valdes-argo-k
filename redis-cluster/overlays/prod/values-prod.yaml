@@ -1,17 +1,22 @@
 architecture: replication
-cluster:
-  nodes: 6
-  replicas: 1
 
 auth:
   enabled: true
   existingSecret: redis-secret
   existingSecretPasswordKey: redis-password
 
-persistence:
-  enabled: true
-  storageClass: gp2
-  size: 2Gi
+master:
+  persistence:
+    enabled: true
+    storageClass: gp2
+    size: 2Gi
+
+replica:
+  replicaCount: 1
+  persistence:
+    enabled: true
+    storageClass: gp2
+    size: 2Gi
 
 tls:
   enabled: false   # flip to true if you want TLS
