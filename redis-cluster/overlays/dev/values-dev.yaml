@@ -1,9 +1,27 @@
-persistence:
-  size: 2Gi
+architecture: standalone   # dev usually doesn’t need HA
 
-cluster:
-  nodes: 3
-  replicas: 1
+auth:
+  enabled: true
+  existingSecret: redis-secret
+  existingSecretPasswordKey: redis-password
+
+master:
+  persistence:
+    enabled: false   # don’t persist in dev
+    storageClass: ""
+    size: 1Gi
+
+replica:
+  replicaCount: 0   # no replicas in dev
+  persistence:
+    enabled: false
+    storageClass: ""
+    size: 1Gi
 
 tls:
   enabled: false
+
+metrics:
+  enabled: false
+  serviceMonitor:
+    enabled: false
