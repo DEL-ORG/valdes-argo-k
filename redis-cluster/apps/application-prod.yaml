@@ -10,7 +10,7 @@ spec:
     namespace: redis-cluster
   source:
     repoURL: https://github.com/DEL-ORG/valdes-argo-k.git
-    targetRevision: main
+    targetRevision: HEAD
     path: redis-cluster/overlays/prod
   syncPolicy:
     automated:
