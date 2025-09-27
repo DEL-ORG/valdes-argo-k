@@ -9,7 +9,7 @@ cluster:
 persistence:
   enabled: true
   size: 10Gi
-  storageClass: gp2 # update with your CSI class
+  storageClass: default # update with your CSI class
   accessModes:
     - ReadWriteOnce
 
