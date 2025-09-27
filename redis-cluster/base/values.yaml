@@ -1,8 +1,8 @@
 architecture: cluster
 
 cluster:
-  nodes: 4        # 3 masters + 3 replicas
-  replicas: 1
+  nodes: 6       # 3 masters + 3 replicas
+  replicas: 2
   externalAccess:
     enabled: false
 
