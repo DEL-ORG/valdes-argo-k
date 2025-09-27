@@ -1,9 +1,27 @@
-persistence:
-  size: 5Gi
+architecture: replication
 
-cluster:
-  nodes: 4
-  replicas: 1
+auth:
+  enabled: true
+  existingSecret: redis-secret
+  existingSecretPasswordKey: redis-password
+
+master:
+  persistence:
+    enabled: true
+    storageClass: default
+    size: 1Gi   # smaller disk than prod
+
+replica:
+  replicaCount: 1
+  persistence:
+    enabled: true
+    storageClass: default
+    size: 1Gi
 
 tls:
   enabled: false
+
+metrics:
+  enabled: true        # allow Prometheus scraping in test
+  serviceMonitor:
+    enabled: true      # useful to validate observability setup
