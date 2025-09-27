@@ -12,7 +12,7 @@ master:
     size: 2Gi
 
 replica:
-  replicaCount: 2
+  replicaCount: 3
   persistence:
     enabled: true
     storageClass: default
