@@ -1,7 +1,7 @@
 architecture: cluster
 
 cluster:
-  nodes: 6        # 3 masters + 3 replicas
+  nodes: 4        # 3 masters + 3 replicas
   replicas: 1
   externalAccess:
     enabled: false
