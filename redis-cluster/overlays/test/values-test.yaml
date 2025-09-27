@@ -22,6 +22,6 @@ tls:
   enabled: false
 
 metrics:
-  enabled: true        # allow Prometheus scraping in test
+  enabled: false        # allow Prometheus scraping in test
   serviceMonitor:
-    enabled: true      # useful to validate observability setup
+    enabled: false     # useful to validate observability setup
