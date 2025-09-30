@@ -1,7 +1,7 @@
 architecture: replication
 cluster:
   enabled: true
-  slaveCount: 4
+  slaveCount: 3
 
 
 auth:
