@@ -1,7 +1,7 @@
 architecture: replication
-cluster:
-  enabled: true
-  slaveCount: 3
+# cluster:
+#   enabled: true
+#   slaveCount: 3
 
 
 auth:
@@ -16,7 +16,7 @@ master:
     size: 2Gi
 
 replica:
-  replicaCount: 3
+  replicaCount: 4
   persistence:
     enabled: true
     storageClass: default
