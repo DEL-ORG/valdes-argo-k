@@ -1,42 +1,8 @@
-# architecture: replication
-# # cluster:
-# #   enabled: true
-# #   slaveCount: 3
-
-
-# auth:
+architecture: replication
+# cluster:
 #   enabled: true
-#   existingSecret: redis-secret
-#   existingSecretPasswordKey: redis-password
+#   slaveCount: 3
 
-# master:
-#   persistence:
-#     enabled: true
-#     storageClass: default
-#     size: 2Gi
-
-# replica:
-#   replicaCount: 3
-#   persistence:
-#     enabled: true
-#     storageClass: default
-#     size: 2Gi
-
-# tls:
-#   enabled: false   # flip to true if you want TLS
-
-# metrics:
-#   enabled: false
-#   serviceMonitor:
-#     enabled: false
-
-
-architecture: cluster
-
-cluster:
-  enabled: true
-  nodes: 2        # number of masters (shards)
-  replicas: 1     # number of replicas per master
 
 auth:
   enabled: true
@@ -50,6 +16,7 @@ master:
     size: 2Gi
 
 replica:
+  replicaCount: 3
   persistence:
     enabled: true
     storageClass: default
@@ -62,3 +29,36 @@ metrics:
   enabled: false
   serviceMonitor:
     enabled: false
+
+
+# architecture: cluster
+
+# cluster:
+#   enabled: true
+#   nodes: 2        # number of masters (shards)
+#   replicas: 1     # number of replicas per master
+
+# auth:
+#   enabled: true
+#   existingSecret: redis-secret
+#   existingSecretPasswordKey: redis-password
+
+# master:
+#   persistence:
+#     enabled: true
+#     storageClass: default
+#     size: 2Gi
+
+# replica:
+#   persistence:
+#     enabled: true
+#     storageClass: default
+#     size: 2Gi
+
+# tls:
+#   enabled: false   # flip to true if you want TLS
+
+# metrics:
+#   enabled: false
+#   serviceMonitor:
+#     enabled: false
