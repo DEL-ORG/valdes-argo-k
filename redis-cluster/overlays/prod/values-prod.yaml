@@ -35,8 +35,8 @@ architecture: cluster
 
 cluster:
   enabled: true
-  nodes: 3         # number of masters (shards)
-  replicas: 3      # number of replicas per master
+  nodes: 2        # number of masters (shards)
+  replicas: 1     # number of replicas per master
 
 auth:
   enabled: true
