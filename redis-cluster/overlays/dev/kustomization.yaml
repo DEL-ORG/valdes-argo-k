@@ -2,10 +2,10 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
 helmCharts:
-  - name: redis-cluster
+  - name: redis
     releaseName: redis-cluster
     namespace: redis-cluster
-    version: 8.9.0   # pick a stable version from Bitnami repo
+    version: 18.16.0   # pick the version you want
     repo: https://charts.bitnami.com/bitnami
     valuesFile: values-dev.yaml
 
