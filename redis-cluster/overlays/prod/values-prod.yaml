@@ -23,7 +23,7 @@ replica:
     size: 2Gi
 
 tls:
-  enabled: false   # flip to true if you want TLS
+  enabled: true   # flip to true if you want TLS
 
 metrics:
   enabled: false
