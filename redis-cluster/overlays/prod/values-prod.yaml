@@ -26,9 +26,9 @@ tls:
   enabled: false   # flip to true if you want TLS
 
 metrics:
-  enabled: false
+  enabled: true
   serviceMonitor:
-    enabled: false
+    enabled: true
 
 
 # architecture: cluster
