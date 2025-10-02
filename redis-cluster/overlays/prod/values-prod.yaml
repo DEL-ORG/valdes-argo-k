@@ -1,7 +1,9 @@
-architecture: replication
-# cluster:
-#   enabled: true
-#   slaveCount: 3
+architecture: cluster
+
+cluster:
+  enabled: true
+  nodes: 3       # ✅ 3 masters (shards)
+  replicas: 1    # ✅ 1 replica per master
 
 
 auth:
