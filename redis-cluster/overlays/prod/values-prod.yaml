@@ -18,7 +18,7 @@ master:
     size: 1Gi
 
 replica:
-  # replicaCount: 3
+  replicaCount: 3
   persistence:
     enabled: true
     storageClass: default
