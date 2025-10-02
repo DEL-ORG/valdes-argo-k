@@ -15,14 +15,14 @@ master:
   persistence:
     enabled: true
     storageClass: default
-    size: 1Gi
+    size: 2Gi
 
 replica:
-  # replicaCount: 3
+  replicaCount: 3
   persistence:
     enabled: true
     storageClass: default
-    size: 1Gi
+    size: 2Gi
 
 # persistence:
 #   enabled: true
