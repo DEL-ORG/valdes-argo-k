@@ -18,11 +18,15 @@ master:
     size: 1Gi
 
 replica:
-  replicaCount: 3
+  # replicaCount: 3
   persistence:
     enabled: true
     storageClass: default
     size: 1Gi
+
+persistence:
+  enabled: true
+  size: 1Gi
 
 tls:
   enabled: false   # flip to true if you want TLS
