@@ -7,7 +7,7 @@ helmCharts:
     namespace: redis-cluster
     version: 10.0.1   # pick the version you want
     repo: oci://registry-1.docker.io/bitnamicharts
-    valuesFiles: values-prod.yaml
+    valuesFile: values-prod.yaml
 
 resources:
   - ../../base
