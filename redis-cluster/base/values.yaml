@@ -8,7 +8,7 @@ cluster:
 
 persistence:
   enabled: true
-  size: 10Gi
+  size: 1Gi
   storageClass: default # update with your CSI class
   accessModes:
     - ReadWriteOnce
