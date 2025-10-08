@@ -1,10 +1,4 @@
-architecture: cluster
-
-cluster:
-  enabled: true
-  nodes: 3       # ✅ 3 masters (shards)
-  replicas: 1    # ✅ 1 replica per master
-
+architecture: replication
 
 auth:
   enabled: true
@@ -15,18 +9,17 @@ master:
   persistence:
     enabled: true
     storageClass: default
-    size: 1Gi
+    size: 2Gi
 
 replica:
   replicaCount: 3
   persistence:
     enabled: true
     storageClass: default
-    size: 1Gi
-
+    size: 2Gi
 
 tls:
-  enabled: false   # flip to true if you want TLS
+  enabled: false   
 
 metrics:
   enabled: false
