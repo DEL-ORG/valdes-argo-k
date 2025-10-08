@@ -1,4 +1,8 @@
 architecture: replication
+image:
+  registry: docker.io
+  repository: bitnamisecure/redis
+  tag: 7.4.secure    # hypothetical — check actual tag in bitnamisecure
 
 auth:
   enabled: true
