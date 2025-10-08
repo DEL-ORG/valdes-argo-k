@@ -1,7 +1,8 @@
 architecture: replication
 
+
 image:
-  repository: docker.io/bitnami/redis
+  repository: bitnami/redis
   tag: 7.4.0-debian-12-r0
   pullPolicy: IfNotPresent
 
