@@ -11,17 +11,3 @@ helmCharts:
 
 resources:
   - ../../base
-
-# apiVersion: kustomize.config.k8s.io/v1beta1
-# kind: Kustomization
-
-# helmCharts:
-#   - name: redis-cluster
-#     releaseName: redis-cluster
-#     namespace: redis-cluster
-#     version: 13.0.4   # pick a stable version from Bitnami repo
-#     repo: https://charts.bitnami.com/bitnami
-#     valuesFile: values-prod.yaml
-
-# resources:
-#   - ../../base
