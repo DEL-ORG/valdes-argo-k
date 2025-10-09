@@ -7,13 +7,13 @@ auth:
 master:
   persistence:
     enabled: true
-    size: 20Gi
+    size: 2Gi
 
 replica:
-  replicaCount: 2
+  replicaCount: 3
   persistence:
     enabled: true
-    size: 20Gi
+    size: 2Gi
 
 tls:
   enabled: true

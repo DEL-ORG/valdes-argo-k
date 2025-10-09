@@ -8,7 +8,7 @@ cluster:
   enabled: true
   slaveCount: 1
   replicas: 1
-  nodes: 6
+  nodes: 3
   update:
     type: RollingUpdate
 
