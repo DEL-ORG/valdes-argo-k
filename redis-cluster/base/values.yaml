@@ -31,7 +31,7 @@ metrics:
     enabled: true
 
 tls:
-  enabled: false
+  enabled: true
 
 resources:
   requests:
