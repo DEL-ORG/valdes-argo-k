@@ -1,4 +1,4 @@
-fullnameOverride: redis-cluster
+fullnameOverride: redis
 nameOverride: redis-cluster
 
 architecture: replication
