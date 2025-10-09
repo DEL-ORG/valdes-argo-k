@@ -1,5 +1,5 @@
-fullnameOverride: redis
-nameOverride: redis
+fullnameOverride: redis-cluster
+nameOverride: redis-cluster
 
 architecture: replication
 
@@ -14,9 +14,12 @@ auth:
   password: redis@12345
 
 master:
+  replicaCount: 3
   persistence:
     enabled: true
     size: 2Gi
+  service:
+    name: redis-headless # ensures replicas can find master
 
 replica:
   replicaCount: 3
@@ -30,3 +33,11 @@ tls:
 
 service:
   type: ClusterIP
+  headless:
+    enabled: true
+    name: redis-headless
+
+metrics:
+  enabled: true
+  service:
+    type: ClusterIP
