@@ -1,5 +1,11 @@
 architecture: replication
 
+image:
+  registry: docker.io
+  repository: bitnami/redis
+  pullPolicy: IfNotPresent
+
+
 auth:
   enabled: true
   password: redis@12345
