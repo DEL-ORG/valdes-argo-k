@@ -10,7 +10,7 @@ master:
     size: 2Gi
 
 replica:
-  replicaCount: 3
+  replicaCount: 2
   persistence:
     enabled: true
     size: 2Gi
