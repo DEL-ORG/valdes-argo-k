@@ -1,31 +1,4 @@
-architecture: replication
-image:
-  registry: docker.io
-  repository: bitnamisecure/redis
-  tag: 7.4.secure    # hypothetical — check actual tag in bitnamisecure
-
-auth:
-  enabled: true
-  existingSecret: redis-secret
-  existingSecretPasswordKey: redis-password
-
-master:
-  persistence:
-    enabled: true
-    storageClass: default
-    size: 1Gi   # smaller disk than prod
-
-replica:
-  replicaCount: 1
-  persistence:
-    enabled: true
-    storageClass: default
-    size: 1Gi
-
-tls:
-  enabled: false
-
-metrics:
-  enabled: false        # allow Prometheus scraping in test
-  serviceMonitor:
-    enabled: false     # useful to validate observability setup
+cluster:
+  replicas: 1
+persistence:
+  size: 4Gi
