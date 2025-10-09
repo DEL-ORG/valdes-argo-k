@@ -15,7 +15,7 @@ master:
   service:
     name: redis-headless # replicas use this to find master
   tls:
-    enabled: true
+    enabled: false
 
 replica:
   replicaCount: 3
@@ -23,7 +23,7 @@ replica:
     enabled: true
     size: 2Gi
   tls:
-    enabled: true   # <--- important: replicas must use TLS too
+    enabled: false   # <--- important: replicas must use TLS too
 
 tls:
   enabled: false
