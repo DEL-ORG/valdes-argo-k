@@ -9,9 +9,9 @@ resources:
   - networkpolicy.yaml
 
 helmCharts:
-  - name: redis
+  - name: redis-cluster
     releaseName: redis-cluster
-    repo: https://charts.bitnami.com/bitnami
-    version: 20.2.0
     namespace: redis-cluster
+    repo: https://charts.bitnami.com/bitnami
+    version: 9.8.1
     valuesFile: values.yaml
