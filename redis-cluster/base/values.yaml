@@ -1,16 +1,17 @@
 architecture: cluster
 
 
-image:
-  registry: docker.io
-  repository: redis
-  tag: 7.2.4
-  pullPolicy: IfNotPresent
+# image:
+#   registry: docker.io
+#   repository: redis
+#   tag: 7.2.4
+#   pullPolicy: IfNotPresent
 
 
 auth:
   enabled: true
   existingSecret: redis-password
+  
 
 cluster:
   enabled: true
