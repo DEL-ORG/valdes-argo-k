@@ -1,4 +1,4 @@
-architecture: replication
+architecture: cluster
 
 auth:
   enabled: true

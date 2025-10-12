@@ -5,8 +5,8 @@ resources:
   - ../../base
 
 helmCharts:
-  - name: redis
+  - name: redis-cluster
     releaseName: redis-cluster
     repo: https://charts.bitnami.com/bitnami
-    namespace: redis-cluster
-    valuesFile: values-prod.yaml
+    version: 10.0.0
+    valuesFile: values.yaml
