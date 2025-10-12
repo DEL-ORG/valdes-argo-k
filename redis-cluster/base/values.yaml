@@ -18,10 +18,10 @@ service:
 
 persistence:
   enabled: true
-  size: 8Gi
+  size: 2Gi
   accessModes:
     - ReadWriteOnce
-  storageClass: gp2-encrypted
+  storageClass: default
 
 resources:
   requests:

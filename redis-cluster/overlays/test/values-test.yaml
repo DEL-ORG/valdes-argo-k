@@ -5,7 +5,7 @@ cluster:
   replicas: 1
 
 persistence:
-  size: 4Gi
+  size: 2Gi
   storageClass: gp2
 
 resources:

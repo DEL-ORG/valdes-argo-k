@@ -2,12 +2,12 @@ architecture: cluster
 
 cluster:
   nodes: 3
-  replicas: 1
+  replicas: 3
   update:
     type: RollingUpdate
 
 persistence:
-  size: 2Gi
+  size: 1Gi
   storageClass: default
 
 resources:
