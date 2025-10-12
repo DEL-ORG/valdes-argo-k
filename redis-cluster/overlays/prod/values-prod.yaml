@@ -7,7 +7,7 @@ cluster:
     type: RollingUpdate
 
 persistence:
-  size: 1Gi
+  size: 2Gi
   storageClass: default
 
 resources:
