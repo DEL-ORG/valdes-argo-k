@@ -1,13 +1,20 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
-namespace: redis-cluster
 resources:
   - ../../base
 
-patches:
-  - path: values-dev.yaml
-    target:
-      kind: HelmChart
-      name: redis
+configMapGenerator:
+  - name: redis-values
+    behavior: merge
+    literals:
+      - cluster.replicas=1
+      - persistence.size=2Gi
+      - architecture=cluster
 
+helmCharts:
+  - name: redis
+    releaseName: redis-cluster
+    repo: https://charts.bitnami.com/bitnami
+    namespace: redis-cluster
+    valuesFile: values-dev.yaml

@@ -3,6 +3,8 @@ kind: Application
 metadata:
   name: redis-cluster
   namespace: argocd
+  labels:
+    app.kubernetes.io/part-of: platform-tools
 spec:
   project: platform-tools
   source:
@@ -18,6 +20,4 @@ spec:
       selfHeal: true
     syncOptions:
       - CreateNamespace=true
-      - Replace=true
       - ApplyOutOfSyncOnly=true
-  revisionHistoryLimit: 3

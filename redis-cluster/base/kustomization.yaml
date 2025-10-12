@@ -5,13 +5,13 @@ namespace: redis-cluster
 
 resources:
   - namespace.yaml
-  - secret-redis.yaml
+  - redis-secret.yaml
   - networkpolicy.yaml
 
 helmCharts:
-  - name: redis-cluster
+  - name: redis
     releaseName: redis-cluster
-    namespace: redis-cluster
     repo: https://charts.bitnami.com/bitnami
-    version: 9.8.1
+    namespace: redis-cluster
+    version: 20.3.0
     valuesFile: values.yaml

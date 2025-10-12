@@ -1,5 +1,17 @@
+architecture: cluster
+
 cluster:
-  replicas: 0  # smaller for dev
+  nodes: 3
+  replicas: 1
+
 persistence:
   size: 2Gi
+  storageClass: standard
 
+resources:
+  requests:
+    cpu: 50m
+    memory: 128Mi
+  limits:
+    cpu: 200m
+    memory: 256Mi

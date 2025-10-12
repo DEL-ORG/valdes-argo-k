@@ -1,7 +1,0 @@
-Redis Cluster will deploy 3 masters + replicas, sharded automatically.
-Access using:
-  redis-cli -h redis-cluster-headless -a <password>
-
-For internal DNS:
-  redis-cluster-headless.redis-cluster.svc.cluster.local
-  redis-cluster.redis-cluster.svc.cluster.local

@@ -1,4 +1,17 @@
+architecture: cluster
+
 cluster:
+  nodes: 3
   replicas: 1
+
 persistence:
   size: 4Gi
+  storageClass: gp2
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 256Mi
+  limits:
+    cpu: 400m
+    memory: 512Mi

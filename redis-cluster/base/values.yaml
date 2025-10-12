@@ -6,38 +6,40 @@ auth:
 
 cluster:
   enabled: true
-  slaveCount: 1
-  replicas: 1
   nodes: 3
+  replicas: 1
   update:
     type: RollingUpdate
 
-persistence:
-  enabled: true
-  size: 2Gi
-  storageClass: default
-  accessModes:
-    - ReadWriteOnce
-
 service:
   type: ClusterIP
-  clusterIP: None
   ports:
     redis: 6379
+
+persistence:
+  enabled: true
+  size: 8Gi
+  accessModes:
+    - ReadWriteOnce
+  storageClass: gp2-encrypted
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 256Mi
+  limits:
+    cpu: 500m
+    memory: 512Mi
+
+networkPolicy:
+  enabled: true
+  allowExternal: false
+
+tls:
+  enabled: false
 
 metrics:
   enabled: true
   serviceMonitor:
-    enabled: true
-
-tls:
-  enabled: true
-
-resources:
-  requests:
-    cpu: 250m
-    memory: 512Mi
-  limits:
-    cpu: 500m
-    memory: 1Gi
+    enabled: false
 
