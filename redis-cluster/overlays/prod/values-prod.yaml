@@ -7,6 +7,23 @@ image:
 
 architecture: cluster
 
+master:
+  command:
+    - "redis-server"
+  args:
+    - "--cluster-enabled"
+    - "yes"
+    - "--cluster-config-file"
+    - "/data/nodes.conf"
+    - "--cluster-node-timeout"
+    - "5000"
+    - "--appendonly"
+    - "yes"
+    - "--requirepass"
+    - "$(REDIS_PASSWORD)"
+    - "--masterauth"
+    - "$(REDIS_PASSWORD)"
+
 cluster:
   nodes: 3
   replicas: 3
