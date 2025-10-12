@@ -9,4 +9,4 @@ helmCharts:
     releaseName: redis-cluster
     repo: https://charts.bitnami.com/bitnami
     version: 10.0.0
-    valuesFile: values.yaml
+    valuesFile: values-prod.yaml
