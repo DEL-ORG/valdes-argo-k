@@ -6,6 +6,11 @@ architecture: cluster
 #   repository: redis
 #   tag: 7.2.4
 #   pullPolicy: IfNotPresent
+image:
+  registry: docker.io
+  repository: bitnami/redis-cluster
+  tag: 7.4.1-debian-12-r3
+  pullPolicy: IfNotPresent
 
 
 auth:
@@ -51,4 +56,9 @@ metrics:
   enabled: true
   serviceMonitor:
     enabled: false
+  image:
+    registry: docker.io
+    repository: bitnami/redis-exporter
+    tag: 1.61.0-debian-12-r2
+    pullPolicy: IfNotPresent
 
