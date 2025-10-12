@@ -19,7 +19,7 @@ resources:
     memory: 1Gi
 
 networkPolicy:
-  enabled: true
+  enabled: false
   allowExternal: false
 
 tls:
