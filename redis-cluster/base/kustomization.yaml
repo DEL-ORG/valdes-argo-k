@@ -6,7 +6,6 @@ namespace: redis-cluster
 resources:
   - namespace.yaml
   - redis-secret.yaml
-  - networkpolicy.yaml
 
 helmCharts:
   - name: redis-cluster
