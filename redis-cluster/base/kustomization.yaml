@@ -12,6 +12,6 @@ helmCharts:
   - name: redis-cluster
     releaseName: redis-cluster
     repo: https://charts.bitnami.com/bitnami
-    version: 10.0.0 # or latest available version
+    version: 10.2.0 # or latest available version
     namespace: redis-cluster
     valuesFile: values.yaml
