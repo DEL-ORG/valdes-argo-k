@@ -4,5 +4,8 @@ kind: Kustomization
 resources:
   - ../../base
 
-patchesStrategicMerge:
-  - values-dev.yaml
+patches:
+  - path: values-dev.yaml
+    target:
+      kind: HelmChart
+      name: redis

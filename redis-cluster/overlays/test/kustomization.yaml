@@ -4,5 +4,8 @@ kind: Kustomization
 resources:
   - ../../base
 
-patchesStrategicMerge:
-  - values-test.yaml
+patches:
+  - path: values-test.yaml
+    target:
+      kind: HelmChart
+      name: redis
