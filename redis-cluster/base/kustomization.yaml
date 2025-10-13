@@ -10,8 +10,9 @@ resources:
 
 helmCharts:
   - name: redis
-    repo: https://charts.redis.io/
-    version: 19.5.0
     releaseName: redis-cluster
     namespace: redis-cluster
-    valuesFile: helm-values.yaml
+    repo: https://charts.bitnami.com/bitnami
+    version: 19.5.0
+    valuesFiles:
+      - helm-values.yaml
