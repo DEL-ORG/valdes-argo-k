@@ -4,6 +4,15 @@ image:
   tag: 7.2.4
   pullPolicy: IfNotPresent
 
+image:
+  repository: ghcr.io/bitnami/redis-cluster
+  tag: 7.4.1-debian-12-r3
+
+metrics:
+  image:
+    repository: ghcr.io/bitnami/redis-exporter
+    tag: 1.59.0-debian-12-r6
+
 
 architecture: cluster
 
