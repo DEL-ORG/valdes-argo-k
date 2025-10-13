@@ -1,18 +1,19 @@
-
-
 image:
   repository: redis
   tag: 7.4.1
-
-
-
+  
+command:
+  - "redis-server"
+args:
+  - "--appendonly"
+  - "yes"
 
 
 architecture: cluster
 
 cluster:
   nodes: 3
-  replicas: 2
+  replicas: 1
   update:
     type: RollingUpdate
 

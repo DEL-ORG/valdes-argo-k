@@ -1,12 +1,9 @@
-# Use standalone Redis (official image)
-architecture: standalone
+architecture: cluster
 
 image:
   repository: redis
   tag: 7.4.1
-  pullPolicy: IfNotPresent
-
-# Official Redis image entrypoint and args
+  
 command:
   - "redis-server"
 args:
@@ -14,11 +11,16 @@ args:
   - "yes"
 
 auth:
-  enabled: false  # disable Bitnami-style auth (not supported in official image)
+  enabled: true
+  existingSecret: redis-password
+  
 
-# Disable Bitnami cluster logic (official Redis image doesn't have cluster scripts)
 cluster:
-  enabled: false
+  enabled: true
+  nodes: 3
+  replicas: 3
+  update:
+    type: RollingUpdate
 
 service:
   type: ClusterIP
@@ -48,7 +50,8 @@ tls:
   enabled: false
 
 metrics:
-  enabled: false
+  enabled: false 
   serviceMonitor:
     enabled: false
+
 
