@@ -1,8 +1,9 @@
 
 
 image:
-  repository: ghcr.io/bitnami/redis-cluster
-  tag: 7.4.1-debian-12-r3
+  repository: redis
+  tag: 7.4.1
+
 
 
 
@@ -11,7 +12,7 @@ architecture: cluster
 
 cluster:
   nodes: 3
-  replicas: 3
+  replicas: 2
   update:
     type: RollingUpdate
 
