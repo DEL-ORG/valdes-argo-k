@@ -9,9 +9,9 @@ resources:
   - networkpolicy.yaml
 
 helmCharts:
-  - name: redis-ha
-    repo: https://dandydeveloper.github.io/charts
-    version: 4.21.4
+  - name: redis
+    repo: https://charts.redis.io/
+    version: 19.5.0
     releaseName: redis-cluster
     namespace: redis-cluster
-    valuesFile: helm-values.yaml
+    valuesFile: redis-values.yaml
