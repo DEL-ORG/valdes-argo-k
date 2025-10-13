@@ -1,14 +1,5 @@
 architecture: cluster
 
-image:
-  repository: redis
-  tag: 7.4.1
-  
-command:
-  - "redis-server"
-args:
-  - "--appendonly"
-  - "yes"
 
 auth:
   enabled: true
