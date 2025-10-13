@@ -14,4 +14,4 @@ helmCharts:
     version: 19.5.0
     releaseName: redis-cluster
     namespace: redis-cluster
-    valuesFile: redis-values.yaml
+    valuesFile: helm-values.yaml
