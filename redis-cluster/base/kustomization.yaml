@@ -14,5 +14,4 @@ helmCharts:
     namespace: redis-cluster
     repo: https://charts.bitnami.com/bitnami
     version: 19.5.0
-    valuesFile:
-      - helm-values.yaml
+    valuesFile: helm-values.yaml
