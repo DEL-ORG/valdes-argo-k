@@ -2,7 +2,7 @@ replica:
   replicaCount: 3
 
 persistence:
-  size: 50Gi
+  size: 2Gi
 
 sentinel:
   replicas: 5
