@@ -1,9 +1,6 @@
 replica:
   replicaCount: 3
 
-persistence:
-  size: 2Gi
-
 sentinel:
   replicas: 5
 

@@ -11,7 +11,7 @@ auth:
 persistence:
   enabled: true
   storageClass: default  # or "ebs-encrypted-sc"
-  size: 2Gi
+  size: 1Gi
 
 replica:
   replicaCount: 2
