@@ -1,26 +1,54 @@
+# Use the official Redis image
 image:
   repository: redis
   tag: 7.4.1
-  
+  pullPolicy: IfNotPresent
+
+# Run redis-server with the config file path used by the official image
 command:
   - "redis-server"
-args:
-  - "--appendonly"
-  - "yes"
+  - "/usr/local/etc/redis/redis.conf"
+# args left empty because config file contains settings
+args: []
 
-
+# cluster settings (chart-specific)
 architecture: cluster
-
 cluster:
   nodes: 3
   replicas: 1
   update:
     type: RollingUpdate
 
+# Persistence (PVC)
 persistence:
   size: 2Gi
   storageClass: default
 
+# Ensure data dir is writable: init container will chown pvc mount
+initContainers:
+  - name: fix-permissions
+    image: busybox:1.36
+    command: ["sh", "-c", "chown -R 0:0 /data || true"]
+    volumeMounts:
+      - name: redis-data
+        mountPath: /data
+
+# Mount a ConfigMap containing redis.conf at the official image path
+extraVolumes:
+  - name: redis-config
+    configMap:
+      name: redis-cluster-config
+extraVolumeMounts:
+  - name: redis-config
+    mountPath: /usr/local/etc/redis/redis.conf
+    subPath: redis.conf
+
+# Run as root temporarily if needed for permissions; we fix perms with initContainer above
+securityContext:
+  runAsUser: 0
+  fsGroup: 0
+
+# Resources
 resources:
   requests:
     cpu: 200m
@@ -34,9 +62,10 @@ networkPolicy:
   allowExternal: false
 
 tls:
-  enabled: false   # Set true once cert secrets exist
+  enabled: false
 
 metrics:
   enabled: false
   serviceMonitor:
     enabled: false
+
