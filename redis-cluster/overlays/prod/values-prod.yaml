@@ -1,8 +1,4 @@
-image:
-  registry: docker.io
-  repository: redis
-  tag: 7.2.4
-  pullPolicy: IfNotPresent
+
 
 image:
   repository: ghcr.io/bitnami/redis-cluster
@@ -42,6 +38,6 @@ tls:
   enabled: false   # Set true once cert secrets exist
 
 metrics:
-  enabled: true
+  enabled: false
   serviceMonitor:
-    enabled: true
+    enabled: false
