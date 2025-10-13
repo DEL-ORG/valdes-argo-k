@@ -4,17 +4,5 @@ kind: Kustomization
 resources:
   - ../../base
 
-configMapGenerator:
-  - name: redis-values
-    behavior: merge
-    literals:
-      - cluster.replicas=1
-      - persistence.size=2Gi
-      - architecture=cluster
-
-helmCharts:
-  - name: redis
-    releaseName: redis-cluster
-    repo: https://charts.bitnami.com/bitnami
-    namespace: redis-cluster
-    valuesFile: values-dev.yaml
+patchesStrategicMerge:
+  - values-dev.yaml

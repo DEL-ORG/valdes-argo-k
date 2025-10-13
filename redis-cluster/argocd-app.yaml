@@ -3,14 +3,14 @@ kind: Application
 metadata:
   name: redis-cluster
   namespace: argocd
-  labels:
-    app.kubernetes.io/part-of: platform-tools
 spec:
   project: platform-tools
   source:
     repoURL: https://github.com/DEL-ORG/valdes-argo-k.git
     targetRevision: main
     path: redis-cluster/overlays/prod
+    plugin:
+      name: kustomize
   destination:
     server: https://kubernetes.default.svc
     namespace: redis-cluster

@@ -1,17 +1,14 @@
-architecture: cluster
-
-cluster:
-  nodes: 3
-  replicas: 1
-
-persistence:
-  size: 2Gi
-  storageClass: standard
+replica:
+  replicaCount: 1
 
 resources:
-  requests:
-    cpu: 50m
-    memory: 128Mi
-  limits:
-    cpu: 200m
-    memory: 256Mi
+  master:
+    requests:
+      cpu: "200m"
+      memory: "512Mi"
+    limits:
+      cpu: "400m"
+      memory: "1Gi"
+
+persistence:
+  size: 5Gi

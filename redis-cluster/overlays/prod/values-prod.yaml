@@ -1,34 +1,24 @@
-
-
-
-architecture: cluster
-
-cluster:
-  nodes: 3
-  replicas: 1
-  update:
-    type: RollingUpdate
+replica:
+  replicaCount: 3
 
 persistence:
-  size: 2Gi
-  storageClass: default
+  size: 50Gi
+
+sentinel:
+  replicas: 5
 
 resources:
-  requests:
-    cpu: 200m
-    memory: 512Mi
-  limits:
-    cpu: 1
-    memory: 1Gi
-
-networkPolicy:
-  enabled: false
-  allowExternal: false
-
-tls:
-  enabled: false   # Set true once cert secrets exist
-
-metrics:
-  enabled: false
-  serviceMonitor:
-    enabled: false
+  master:
+    requests:
+      cpu: "1"
+      memory: "2Gi"
+    limits:
+      cpu: "2"
+      memory: "4Gi"
+  replica:
+    requests:
+      cpu: "500m"
+      memory: "1Gi"
+    limits:
+      cpu: "1"
+      memory: "2Gi"

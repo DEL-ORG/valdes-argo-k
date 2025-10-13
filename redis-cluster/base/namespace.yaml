@@ -4,4 +4,4 @@ metadata:
   name: redis-cluster
   labels:
     name: redis-cluster
-    managed-by: argocd
+    app.kubernetes.io/part-of: platform-tools

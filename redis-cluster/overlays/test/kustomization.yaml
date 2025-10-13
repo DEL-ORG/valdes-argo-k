@@ -4,9 +4,5 @@ kind: Kustomization
 resources:
   - ../../base
 
-helmCharts:
-  - name: redis
-    releaseName: redis-cluster
-    repo: https://charts.bitnami.com/bitnami
-    namespace: redis-cluster
-    valuesFile: values-test.yaml
+patchesStrategicMerge:
+  - values-test.yaml

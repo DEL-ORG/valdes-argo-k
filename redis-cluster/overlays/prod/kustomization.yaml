@@ -4,9 +4,5 @@ kind: Kustomization
 resources:
   - ../../base
 
-# helmCharts:
-#   - name: redis-cluster
-#     releaseName: redis-cluster
-#     repo: https://charts.bitnami.com/bitnami
-#     version: 10.0.0
-#     valuesFile: values-prod.yaml
+patchesStrategicMerge:
+  - values-prod.yaml

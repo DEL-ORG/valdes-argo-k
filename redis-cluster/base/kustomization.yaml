@@ -5,13 +5,13 @@ namespace: redis-cluster
 
 resources:
   - namespace.yaml
-  - redis-secret.yaml
+  - secret-redis-password.yaml
   - networkpolicy.yaml
 
 helmCharts:
-  - name: redis-cluster
+  - name: redis-ha
+    repo: https://dandydeveloper.github.io/charts
+    version: 4.21.4
     releaseName: redis-cluster
-    repo: https://charts.bitnami.com/bitnami
-    version: 10.2.0 # or latest available version
     namespace: redis-cluster
-    valuesFile: values.yaml
+    valuesFile: helm-values.yaml
