@@ -1,6 +1,4 @@
-architecture: cluster
-
-
+architecture: replication
 
 image:
   repository: docker.io/library/redis
@@ -56,3 +54,4 @@ metrics:
     enabled: true
     serviceMonitor:
       enabled: true
+
