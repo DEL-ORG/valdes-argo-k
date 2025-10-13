@@ -4,5 +4,4 @@ kind: Kustomization
 resources:
   - ../../base
 
-patchesStrategicMerge:
-  - values-prod.yaml
+valuesFile: values-prod.yaml
