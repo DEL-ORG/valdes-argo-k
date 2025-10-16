@@ -6,7 +6,7 @@ metadata:
   labels:
     app: cleanup-loadbalancer
 spec:
-  schedule: "*/30 * * * *"
+  schedule: "*/5 * * * *"
   successfulJobsHistoryLimit: 2
   failedJobsHistoryLimit: 2
   jobTemplate:
