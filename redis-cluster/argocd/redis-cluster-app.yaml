@@ -3,6 +3,8 @@ kind: Application
 metadata:
   name: redis-cluster
   namespace: argocd
+  labels:
+    app.kubernetes.io/part-of: platform-tools
 spec:
   project: platform-tools
   source:
@@ -10,7 +12,7 @@ spec:
     targetRevision: main
     path: redis-cluster/overlays/prod
   destination:
-    server: https://kubernetes.default.svc
+    server: 'https://kubernetes.default.svc'
     namespace: redis-cluster
   syncPolicy:
     automated:
@@ -19,3 +21,6 @@ spec:
     syncOptions:
       - CreateNamespace=true
       - ApplyOutOfSyncOnly=true
+
+
+
