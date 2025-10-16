@@ -1,0 +1,34 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: cleanup-loadbalancers
+  namespace: cleanup-lb
+  labels:
+    app: cleanup-loadbalancer
+spec:
+  schedule: "*/30 * * * *"
+  successfulJobsHistoryLimit: 2
+  failedJobsHistoryLimit: 2
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          serviceAccountName: cleanup-lb-sa
+          restartPolicy: OnFailure
+          containers:
+          - name: cleanup
+            image: bitnami/kubectl:latest
+            command: ["python3", "/scripts/cleanup_loadbalancers.py"]
+            volumeMounts:
+              - name: script
+                mountPath: /scripts
+              - name: config
+                mountPath: /config
+          volumes:
+            - name: script
+              configMap:
+                name: cleanup-lb-script
+                defaultMode: 0755
+            - name: config
+              configMap:
+                name: approved-namespaces

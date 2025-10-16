@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: approved-namespaces
+  namespace: cleanup-lb
+data:
+  approved_namespaces: "argocd"
