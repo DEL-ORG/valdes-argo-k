@@ -17,7 +17,7 @@ spec:
           restartPolicy: OnFailure
           containers:
           - name: cleanup
-            image: bitnami/kubectl:latest
+            image: lachlanevenson/k8s-kubectl
             command: ["python3", "/scripts/cleanup_loadbalancers.py"]
             volumeMounts:
               - name: script
