@@ -1,5 +1,14 @@
-replica:
-  replicaCount: 2
+cluster:
+  nodes: 6
+  replicas: 1
 
-persistence:
-  size: 10Gi
+master:
+  persistence:
+    size: 10Gi
+
+replica:
+  persistence:
+    size: 10Gi
+
+tls:
+  enabled: false

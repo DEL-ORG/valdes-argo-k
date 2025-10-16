@@ -1,14 +1,14 @@
+cluster:
+  nodes: 3
+  replicas: 1
+
+master:
+  persistence:
+    size: 5Gi
+
 replica:
-  replicaCount: 1
+  persistence:
+    size: 5Gi
 
-resources:
-  master:
-    requests:
-      cpu: "200m"
-      memory: "512Mi"
-    limits:
-      cpu: "400m"
-      memory: "1Gi"
-
-persistence:
-  size: 5Gi
+tls:
+  enabled: false

@@ -1,57 +1,40 @@
-architecture: replication
-
-image:
-  repository: docker.io/library/redis
-  tag: "7.2.0"
-  pullPolicy: IfNotPresent
+architecture: cluster
 
 auth:
   enabled: true
-  existingSecret: redis-auth
-  existingSecretKey: redis-password
+  existingSecret: redis-password
+  existingSecretPasswordKey: redis-password
 
-persistence:
-  enabled: true
-  storageClass: default  # or "ebs-encrypted-sc"
-  size: 1Gi
+cluster:
+  nodes: 6
+  replicas: 1
+
+master:
+  persistence:
+    enabled: true
+    size: 1Gi
+    storageClass: encrypted-sc
 
 replica:
-  replicaCount: 2
+  persistence:
+    enabled: true
+    size: 1Gi
+    storageClass: encrypted-sc
 
-resources:
-  master:
-    requests:
-      cpu: "500m"
-      memory: "1Gi"
-    limits:
-      cpu: "1"
-      memory: "2Gi"
-  replica:
-    requests:
-      cpu: "250m"
-      memory: "512Mi"
-    limits:
-      cpu: "500m"
-      memory: "1Gi"
-
-sentinel:
-  enabled: true
-  replicas: 3
-
-haproxy:
-  enabled: true
-  service:
-    type: ClusterIP
+service:
+  type: ClusterIP
+  headless:
+    annotations: {}
 
 networkPolicy:
   enabled: true
-  allowFromNamespaces:
-    - platform-apps
+  allowExternal: false
+
+tls:
+  enabled: false
 
 metrics:
   enabled: true
-  exporter:
+  serviceMonitor:
     enabled: true
-    serviceMonitor:
-      enabled: true
-
+    namespace: monitoring

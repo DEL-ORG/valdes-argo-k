@@ -4,12 +4,23 @@ metadata:
   name: redis-cluster-allow-platform
   namespace: redis-cluster
 spec:
-  podSelector: {}
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: redis
   ingress:
     - from:
         - namespaceSelector:
             matchLabels:
               name: platform-tools
+      ports:
+        - protocol: TCP
+          port: 6379
+  egress:
+    - to:
+        - namespaceSelector: {}
+      ports:
+        - protocol: TCP
+          port: 6379
   policyTypes:
     - Ingress
-
+    - Egress
