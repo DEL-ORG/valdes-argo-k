@@ -14,6 +14,7 @@ patches:
         value: "argocd,test-monitoring"
 
   # Change CronJob schedule for test
+patches:
   - target:
       kind: CronJob
       name: loadbalancer-cleaner
@@ -21,3 +22,6 @@ patches:
       - op: replace
         path: /spec/schedule
         value: "*/15 * * * *"
+      - op: replace
+        path: /spec/jobTemplate/spec/template/spec/containers/0/env/0/value
+        value: "false"

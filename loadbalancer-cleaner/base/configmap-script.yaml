@@ -11,6 +11,8 @@ data:
     APPROVED_NAMESPACES=$(cat /config/approved-namespaces)
     IFS=',' read -r -a APPROVED_ARRAY <<< "$APPROVED_NAMESPACES"
 
+    DRY_RUN=${DRY_RUN:-false}
+    echo "Dry-run mode: $DRY_RUN"
     echo "Approved namespaces: ${APPROVED_ARRAY[@]}"
     echo "Checking for LoadBalancer services..."
 
@@ -19,8 +21,13 @@ data:
       "\(.metadata.namespace) \(.metadata.name)"' | while read namespace svc; do
 
       if [[ ! " ${APPROVED_ARRAY[@]} " =~ " ${namespace} " ]]; then
-        echo "Deleting unauthorized LoadBalancer Service: ${namespace}/${svc}"
-        kubectl delete svc "${svc}" -n "${namespace}" --ignore-not-found
+        if [[ "$DRY_RUN" == "true" ]]; then
+          echo "[DRY-RUN] Would delete unauthorized LoadBalancer Service: ${namespace}/${svc}"
+          kubectl delete svc "${svc}" -n "${namespace}" --dry-run=client
+        else
+          echo "Deleting unauthorized LoadBalancer Service: ${namespace}/${svc}"
+          kubectl delete svc "${svc}" -n "${namespace}" --ignore-not-found
+        fi
       else
         echo "Keeping authorized LoadBalancer Service: ${namespace}/${svc}"
       fi

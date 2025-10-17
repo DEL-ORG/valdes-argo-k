@@ -21,3 +21,6 @@ patches:
       - op: replace
         path: /spec/schedule
         value: "*/5 * * * *"
+      - op: replace
+        path: /spec/jobTemplate/spec/template/spec/containers/0/env/0/value
+        value: "true"
