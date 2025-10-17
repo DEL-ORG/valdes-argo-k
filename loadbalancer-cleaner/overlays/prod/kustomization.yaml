@@ -4,6 +4,7 @@ resources:
   - ../../base
 
 patches:
+  # Approved namespaces for production
   - target:
       kind: ConfigMap
       name: lb-cleaner-config
@@ -11,3 +12,12 @@ patches:
       - op: replace
         path: /data/approved-namespaces
         value: "argocd"
+
+  # Change CronJob schedule for production
+  - target:
+      kind: CronJob
+      name: loadbalancer-cleaner
+    patch: |-
+      - op: replace
+        path: /spec/schedule
+        value: "*/30 * * * *"

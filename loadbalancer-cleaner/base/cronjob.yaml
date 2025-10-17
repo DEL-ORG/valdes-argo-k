@@ -4,7 +4,8 @@ metadata:
   name: loadbalancer-cleaner
   namespace: loadbalancer-cleaner
 spec:
-  schedule: "*/2 * * * *"
+  # default placeholder (will be overridden by overlays)
+  schedule: "*/30 * * * *"
   successfulJobsHistoryLimit: 1
   failedJobsHistoryLimit: 2
   jobTemplate:
@@ -30,3 +31,4 @@ spec:
           - name: config
             configMap:
               name: lb-cleaner-config
+
