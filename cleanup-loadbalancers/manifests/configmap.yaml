@@ -4,4 +4,4 @@ metadata:
   name: cleanup-config
   namespace: cluster-governance
 data:
-  approved_namespaces: "argocd"
+  approved_namespaces: "argocd , redis-cluster"
