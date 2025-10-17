@@ -1,4 +1,0 @@
-schedule: "*/10 * * * *"  # run every 10 min for testing
-approvedNamespaces:
-  - argocd
-  - dev-tools

@@ -1,6 +1,0 @@
-apiVersion: v2
-name: cleanup-loadbalancer
-description: Helm chart to automatically clean up unauthorized LoadBalancer services
-type: application
-version: 0.1.0
-appVersion: "1.0.0"

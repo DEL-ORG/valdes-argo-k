@@ -1,5 +1,0 @@
-schedule: "*/30 * * * *"
-approvedNamespaces:
-  - argocd
-  - monitoring
-  - observability
