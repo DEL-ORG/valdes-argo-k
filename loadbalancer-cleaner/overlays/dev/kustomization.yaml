@@ -10,4 +10,4 @@ patches:
     patch: |-
       - op: replace
         path: /data/approved-namespaces
-        value: "argocd,dev-tools,unauthorized"
+        value: "argocd"
