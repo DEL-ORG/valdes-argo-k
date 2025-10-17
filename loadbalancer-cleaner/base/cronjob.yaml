@@ -4,7 +4,7 @@ metadata:
   name: loadbalancer-cleaner
   namespace: loadbalancer-cleaner
 spec:
-  schedule: "*/30 * * * *"
+  schedule: "*/5 * * * *"
   successfulJobsHistoryLimit: 1
   failedJobsHistoryLimit: 2
   jobTemplate:
