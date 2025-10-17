@@ -1,0 +1,29 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: lb-cleaner-script
+  namespace: loadbalancer-cleaner
+data:
+  cleanup-lb-services.sh: |
+    #!/bin/bash
+    set -euo pipefail
+
+    APPROVED_NAMESPACES=$(cat /config/approved-namespaces)
+    IFS=',' read -r -a APPROVED_ARRAY <<< "$APPROVED_NAMESPACES"
+
+    echo "Approved namespaces: ${APPROVED_ARRAY[@]}"
+    echo "Checking for LoadBalancer services..."
+
+    kubectl get svc --all-namespaces -o json | jq -r '
+      .items[] | select(.spec.type=="LoadBalancer") |
+      "\(.metadata.namespace) \(.metadata.name)"' | while read namespace svc; do
+
+      if [[ ! " ${APPROVED_ARRAY[@]} " =~ " ${namespace} " ]]; then
+        echo "Deleting unauthorized LoadBalancer Service: ${namespace}/${svc}"
+        kubectl delete svc "${svc}" -n "${namespace}" --ignore-not-found
+      else
+        echo "Keeping authorized LoadBalancer Service: ${namespace}/${svc}"
+      fi
+    done
+
+    echo "Cleanup complete."

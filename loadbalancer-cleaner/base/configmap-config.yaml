@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: lb-cleaner-config
+  namespace: loadbalancer-cleaner
+data:
+  approved-namespaces: "argocd"

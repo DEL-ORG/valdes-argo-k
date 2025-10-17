@@ -1,0 +1,32 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: loadbalancer-cleaner
+  namespace: loadbalancer-cleaner
+spec:
+  schedule: "*/30 * * * *"
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 2
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          serviceAccountName: cleanup-sa
+          restartPolicy: OnFailure
+          containers:
+          - name: lb-cleaner
+            image: bitnami/kubectl:latest
+            command: ["/bin/bash", "/scripts/cleanup-lb-services.sh"]
+            volumeMounts:
+            - name: script
+              mountPath: /scripts
+            - name: config
+              mountPath: /config
+          volumes:
+          - name: script
+            configMap:
+              name: lb-cleaner-script
+              defaultMode: 0755
+          - name: config
+            configMap:
+              name: lb-cleaner-config
