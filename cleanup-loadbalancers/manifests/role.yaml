@@ -3,6 +3,12 @@ kind: ClusterRole
 metadata:
   name: cleanup-loadbalancers
 rules:
+  # Allow cleanup of Services of type LoadBalancer
   - apiGroups: [""]
     resources: ["services"]
     verbs: ["list", "get", "delete"]
+
+  # Allow listing namespaces (needed for discovery)
+  - apiGroups: [""]
+    resources: ["namespaces"]
+    verbs: ["list", "get"]
