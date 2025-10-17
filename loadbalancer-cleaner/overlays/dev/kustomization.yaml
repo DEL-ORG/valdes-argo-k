@@ -11,7 +11,7 @@ patches:
     patch: |-
       - op: replace
         path: /data/approved-namespaces
-        value: "argocd,dev-tools"
+        value: "argocd"
   
   # Change CronJob schedule for dev
   - target:
