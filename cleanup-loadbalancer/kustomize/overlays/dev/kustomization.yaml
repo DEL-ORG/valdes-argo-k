@@ -1,0 +1,9 @@
+bases:
+  - ../../base
+
+helmCharts:
+  - name: cleanup-loadbalancer
+    path: ../../..
+    releaseName: cleanup-loadbalancer
+    namespace: cleanup-loadbalancer
+    valuesFile: ../../../dev-values.yaml

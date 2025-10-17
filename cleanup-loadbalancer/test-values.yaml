@@ -1,0 +1,4 @@
+schedule: "*/20 * * * *"
+approvedNamespaces:
+  - argocd
+  - qa

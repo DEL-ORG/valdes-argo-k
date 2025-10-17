@@ -1,0 +1,9 @@
+This chart deploys an automated cleanup CronJob that removes unauthorized LoadBalancer Services.
+
+✅ Approved namespaces:
+{{- range .Values.approvedNamespaces }}
+  - {{ . }}
+{{- end }}
+
+Cron schedule: {{ .Values.schedule }}
+Namespace: {{ .Values.namespace.name }}

@@ -1,0 +1,35 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: cleanup-loadbalancer-services
+  namespace: {{ .Values.namespace.name }}
+spec:
+  schedule: {{ .Values.schedule | quote }}
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          serviceAccountName: lb-cleaner
+          containers:
+            - name: lb-cleaner
+              image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+              imagePullPolicy: {{ .Values.image.pullPolicy }}
+              command:
+                - /bin/bash
+                - -c
+                - |
+                  echo "Running cleanup job..."
+                  APPROVED_NAMESPACES=$(kubectl get cm lb-cleaner-config -n {{ .Values.namespace.name }} -o jsonpath='{.data.approved_namespaces}')
+                  IFS=',' read -ra APPROVED <<< "$APPROVED_NAMESPACES"
+                  services=$(kubectl get svc --all-namespaces -o jsonpath='{range .items[?(@.spec.type=="LoadBalancer")]}{.metadata.namespace}{" "}{.metadata.name}{"\n"}{end}')
+                  for svc in $services; do
+                    ns=$(echo $svc | awk '{print $1}')
+                    name=$(echo $svc | awk '{print $2}')
+                    if [[ ! " ${APPROVED[@]} " =~ " ${ns} " ]]; then
+                      echo "Deleting LoadBalancer Service: $name in namespace: $ns"
+                      kubectl delete svc "$name" -n "$ns"
+                    else
+                      echo "Retaining Service: $name in approved namespace: $ns"
+                    fi
+                  done
+          restartPolicy: OnFailure
