@@ -1,7 +1,0 @@
-resources:
-  - 00-namespace.yaml
-  - 01-serviceaccount.yaml
-  - 02-rbac.yaml
-  - 03-configmap.yaml
-  - 04-script-configmap.yaml
-  - 05-cronjob.yaml

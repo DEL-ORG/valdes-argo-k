@@ -1,0 +1,36 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: cleanup-loadbalancer-services
+  namespace: cluster-governance
+  labels:
+    app: cleanup-loadbalancers
+spec:
+  schedule: "*/30 * * * *" # every 30 minutes
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          serviceAccountName: cleanup-sa
+          restartPolicy: OnFailure
+          containers:
+            - name: cleanup
+              image: bitnami/kubectl:latest
+              imagePullPolicy: IfNotPresent
+              command:
+                - /bin/sh
+                - -c
+                - /scripts/cleanup.sh
+              volumeMounts:
+                - name: script-volume
+                  mountPath: /scripts
+                - name: config-volume
+                  mountPath: /config
+          volumes:
+            - name: script-volume
+              configMap:
+                name: cleanup-script
+                defaultMode: 0755
+            - name: config-volume
+              configMap:
+                name: cleanup-config

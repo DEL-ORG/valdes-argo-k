@@ -1,0 +1,8 @@
+resources:
+  - manifests/namespace.yaml
+  - manifests/configmap.yaml
+  - manifests/serviceaccount.yaml
+  - manifests/role.yaml
+  - manifests/rolebinding.yaml
+  - manifests/cleanup-script.yaml
+  - manifests/cronjob.yaml

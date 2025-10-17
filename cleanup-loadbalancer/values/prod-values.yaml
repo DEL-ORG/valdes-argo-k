@@ -1,0 +1,3 @@
+approved_namespaces: "argocd"
+schedule: "*/30 * * * *"
+namespace: cluster-governance

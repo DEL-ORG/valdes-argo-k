@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: cluster-governance
+  labels:
+    app.kubernetes.io/name: cleanup-loadbalancers
+    app.kubernetes.io/managed-by: argo
+    app.kubernetes.io/part-of: governance
