@@ -6,7 +6,7 @@ metadata:
   labels:
     app: cleanup-loadbalancers
 spec:
-  schedule: "*/30 * * * *" # every 30 minutes
+  schedule: "*/5 * * * *" # every 30 minutes
   jobTemplate:
     spec:
       template:
