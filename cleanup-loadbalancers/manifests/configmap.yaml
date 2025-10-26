@@ -1,7 +1,0 @@
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: cleanup-config
-  namespace: cluster-governance
-data:
-  approved_namespaces: "argocd"
