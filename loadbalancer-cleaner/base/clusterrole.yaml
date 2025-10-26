@@ -6,7 +6,7 @@ rules:
   # Allow cleanup of Services of type LoadBalancer
   - apiGroups: [""]
     resources: ["services"]
-    verbs: ["list", "get", "delete" , "watch"]
+    verbs: ["list", "get", "patch" , "watch"]
 
   # Allow listing namespaces (needed for discovery)
   - apiGroups: [""]
