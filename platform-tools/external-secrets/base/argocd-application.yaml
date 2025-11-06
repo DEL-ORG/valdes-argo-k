@@ -3,38 +3,18 @@ kind: Application
 metadata:
   name: external-secrets-operator
   namespace: argocd
-  labels:
-    app.kubernetes.io/part-of: platform-tools
 spec:
   project: platform-tools
 
-  # SOURCE: repoURL, targetRevision, and either path (git) or chart (helm repo)
   source:
-    # this is the Git repo where your kustomize/values live (the repo argocd will read)
-    repoURL: 'https://git.edusuc.net/WEBFORX/ArgoCD-gitops'
+    repoURL: "https://github.com/DEL-ORG/valdes-argo-k.git"   # <- your Git repo
     targetRevision: HEAD
-    path: platform-tools/external-secrets/base
-
-    # When referencing a chart from a Helm repository:
-    chart: 'external-secrets'              # <- chart name lives here (NOT under helm)
-    # If the chart is hosted in a helm repo (not git), set repoURL here:
-    # Note: this repoURL is still inside spec.source (same level as chart),
-    # not inside spec.source.helm
-    repoURL: 'https://charts.external-secrets.io'  # <- helm repo URL here
-
-    # Helm-specific options:
-    helm:
-      releaseName: external-secrets-operator
-      valueFiles:
-        - base-values.yml
-        - overlays/dev/values-patch.yml
-      # optional helm settings:
-      parameters: []
-      passCredentials: false
+    path: platform-tools/external-secrets/base                 # <- path in your repo
+    # NOTE: NO chart / NO repoURL (Helm) at top-level when using path.
 
   destination:
-    server: 'https://kubernetes.default.svc'
-    namespace: external-secrets
+    server: "https://kubernetes.default.svc"
+    namespace: external-secrets2
 
   syncPolicy:
     automated:
@@ -42,3 +22,4 @@ spec:
       selfHeal: true
     syncOptions:
       - CreateNamespace=true
+
