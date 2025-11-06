@@ -1,0 +1,31 @@
+# prod values
+replicaCount: 3
+
+controller:
+  logLevel: info
+  syncInterval: "1m"
+
+resources:
+  manager:
+    requests:
+      cpu: "200m"
+      memory: "400Mi"
+    limits:
+      cpu: "1000m"
+      memory: "1024Mi"
+
+# more strict scheduling and high-availability settings
+affinity:
+  podAntiAffinity:
+    requiredDuringSchedulingIgnoredDuringExecution:
+      - labelSelector:
+          matchLabels:
+            app.kubernetes.io/name: external-secrets
+        topologyKey: "kubernetes.io/hostname"
+
+# enable only providers you need
+providers:
+  aws:
+    enabled: true
+  vault:
+    enabled: false

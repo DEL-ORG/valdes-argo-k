@@ -1,0 +1,32 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: external-secrets-operator
+  namespace: argocd
+  labels:
+    app.kubernetes.io/part-of: platform-tools
+spec:
+  project: platform-tools
+  source:
+    repoURL: 'https://github.com/DEL-ORG/valdes-argo-k.git'   # repo where this Application lives
+    targetRevision: HEAD
+    path: platform-tools/external-secrets/base
+    # We use Helm chart as the source: set up chart repo and chart name here.
+    helm:
+      # NOTE: replace these placeholders with the official ESO Helm repo & chart name
+      repoURL: 'https://charts.external-secrets.io'    # e.g. https://charts.external-secrets.io (replace with official)
+      chart: 'external-secrets'          # e.g. external-secrets (replace with official chart name)
+      releaseName: external-secrets-operator
+      valueFiles:
+        - base-values.yml
+      values: |
+        # Inline values can go here if you need; prefer valueFiles for clarity.
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: external-secrets
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true

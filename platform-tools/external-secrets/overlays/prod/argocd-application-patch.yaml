@@ -1,0 +1,13 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: external-secrets-operator-prod
+spec:
+  source:
+    path: platform-tools/external-secrets/base
+    helm:
+      valueFiles:
+        - base-values.yml
+        - overlays/prod/values-patch.yml
+  destination:
+    namespace: external-secrets2

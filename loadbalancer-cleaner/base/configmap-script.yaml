@@ -21,7 +21,6 @@ data:
       "\(.metadata.namespace) \(.metadata.name)"' | while read namespace svc; do
 
       if [[ ! " ${APPROVED_ARRAY[@]} " =~ " ${namespace} " ]]; then
-      
         if [[ "$DRY_RUN" == "true" ]]; then
           echo "[DRY-RUN] Would patch Service ${namespace}/${svc} to ClusterIP"
           kubectl patch svc "${svc}" -n "${namespace}" --type merge -p '{"spec": {"type": "ClusterIP"}}' --dry-run=client

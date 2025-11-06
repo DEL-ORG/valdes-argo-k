@@ -1,0 +1,80 @@
+# base-values.yml - base Helm values for External Secrets Operator (ESO)
+# - Keep secrets out of git. Use external secret stores and ExternalSecret CRs.
+installCRDs: true
+
+replicaCount: 2
+
+serviceAccount:
+  create: true
+  name: external-secrets-operator
+
+# RBAC: limit scope to namespace-level where possible (set namespaced true if chart supports it)
+rbac:
+  create: true
+  namespaced: true
+
+# Controllers configuration
+controller:
+  # log level can be 'info', 'debug', 'error'
+  logLevel: info
+  metrics:
+    enabled: true
+    service:
+      annotations: {}
+  syncInterval: "1m"
+
+# Webhook and certs — enforce TLS
+webhook:
+  enabled: true
+  tls:
+    # if true, chart will generate CA and certs (or use cert-manager if configured)
+    generate: true
+  service:
+    type: ClusterIP
+
+# Resource requests/limits (adjust to cluster sizing)
+resources:
+  manager:
+    requests:
+      cpu: "100m"
+      memory: "150Mi"
+    limits:
+      cpu: "500m"
+      memory: "512Mi"
+
+  webhook:
+    requests:
+      cpu: "50m"
+      memory: "100Mi"
+    limits:
+      cpu: "250m"
+      memory: "256Mi"
+
+# Enable only the provider integrations you need. Keep them disabled in base.
+providers:
+  aws:
+    enabled: false
+  vault:
+    enabled: false
+  gcp:
+    enabled: false
+  azure:
+    enabled: false
+
+# Namespaces the operator should watch when namespaced RBAC is used (if chart supports)
+# If rbac.namespaced == true the operator will be limited to this namespace by default.
+namespaces:
+  - external-secrets2
+
+# Pod scheduling (optional)
+affinity: {}
+tolerations: []
+nodeSelector: {}
+
+# Security hardening suggestions (not secret values)
+securityContext:
+  runAsNonRoot: true
+  fsGroup: 65532
+
+# Extra arguments passed to controller (example)
+extraArgs: []
