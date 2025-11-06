@@ -11,11 +11,18 @@ spec:
   # SOURCE: repoURL, targetRevision, and either path (git) or chart (helm repo)
   source:
     # this is the Git repo where your kustomize/values live (the repo argocd will read)
-    repoURL: https://github.com/DEL-ORG/valdes-argo-k.git
+    repoURL: 'https://git.edusuc.net/WEBFORX/ArgoCD-gitops'
     targetRevision: HEAD
     path: platform-tools/external-secrets/base
-    chart: 'external-secrets'              
-    repoURL: 'https://charts.external-secrets.io'  
+
+    # When referencing a chart from a Helm repository:
+    chart: 'external-secrets'              # <- chart name lives here (NOT under helm)
+    # If the chart is hosted in a helm repo (not git), set repoURL here:
+    # Note: this repoURL is still inside spec.source (same level as chart),
+    # not inside spec.source.helm
+    repoURL: 'https://charts.external-secrets.io'  # <- helm repo URL here
+
+    # Helm-specific options:
     helm:
       releaseName: external-secrets-operator
       valueFiles:
@@ -27,7 +34,7 @@ spec:
 
   destination:
     server: 'https://kubernetes.default.svc'
-    namespace: external-secrets2
+    namespace: external-secrets
 
   syncPolicy:
     automated:
