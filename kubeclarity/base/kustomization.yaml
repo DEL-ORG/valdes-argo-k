@@ -1,0 +1,20 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: kubeclarity
+
+# Create namespace
+resources:
+  - namespace.yaml
+
+# Use the helmCharts generator to inflate upstream Helm chart into kustomize pipeline
+helmCharts:
+  - name: kubeclarity
+    repo: https://openclarity.github.io/kubeclarity
+    version: "v2.23.3"            # <-- pin or change to the chart version you want
+    releaseName: kubeclarity
+    namespace: kubeclarity
+    valuesFile: values.yaml
+
+commonLabels:
+  app.kubernetes.io/name: kubeclarity
+  app.kubernetes.io/managed-by: argocd-gitops

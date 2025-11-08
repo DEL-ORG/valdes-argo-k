@@ -1,0 +1,33 @@
+# dev-specific smaller footprint values
+ingress:
+  enabled: false
+
+replicaCount:
+  frontend: 1
+  backend: 1
+  analyzer: 0
+
+kubeclarity-postgresql:
+  enabled: true
+  persistence:
+    size: 2Gi
+
+resources:
+  frontend:
+    requests:
+      cpu: 50m
+      memory: 64Mi
+    limits:
+      cpu: 250m
+      memory: 256Mi
+  api:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      cpu: 500m
+      memory: 512Mi
+
+# Use cluster-local image overrides (if you maintain staging images)
+image:
+  tag: "kubeclarity:dev-latest"

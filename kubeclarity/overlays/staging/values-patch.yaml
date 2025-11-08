@@ -1,0 +1,36 @@
+# staging: closer to prod but with smaller persistence and replicas
+ingress:
+  enabled: true
+  hosts:
+    - host: kubeclarity.staging.example.company
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  tls:
+    - secretName: kubeclarity-staging-tls
+      hosts:
+        - kubeclarity.staging.example.company
+
+replicaCount:
+  frontend: 2
+  backend: 2
+  analyzer: 1
+
+kubeclarity-postgresql:
+  enabled: true
+  persistence:
+    size: 5Gi
+
+resources:
+  api:
+    requests:
+      cpu: 200m
+      memory: 256Mi
+    limits:
+      cpu: 800m
+      memory: 1Gi
+
+# Example: you might want to enable Prometheus ServiceMonitor in staging
+metrics:
+  serviceMonitor:
+    enabled: true

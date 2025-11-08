@@ -1,0 +1,55 @@
+# production-ready overrides - update hostnames & secrets
+ingress:
+  enabled: true
+  hosts:
+    - host: kubeclarity.example.company
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  tls:
+    - secretName: kubeclarity-prod-tls
+      hosts:
+        - kubeclarity.example.company
+
+replicaCount:
+  frontend: 3
+  backend: 3
+  analyzer: 2
+
+kubeclarity-postgresql:
+  enabled: true
+  persistence:
+    size: 2Gi
+    storageClass: ""    # set to your production storage class
+
+resources:
+  api:
+    requests:
+      cpu: 500m
+      memory: 512Mi
+    limits:
+      cpu: 2
+      memory: 4Gi
+  frontend:
+    requests:
+      cpu: 200m
+      memory: 256Mi
+    limits:
+      cpu: 1
+      memory: 2Gi
+
+# Security: disable chart-internal default plaintext credentials
+ui:
+  auth:
+    enabled: false
+
+# Example: use external Postgres in prod (uncomment / edit)
+# kubeclarity-postgresql:
+#   enabled: false
+# global:
+#   postgresql:
+#     host: "<prod-db-host>"
+#     port: 5432
+#     user: "kubeclarity"
+#     password: "<SECRET_FROM_VAULT>"
+#     db: "kubeclaritydb"

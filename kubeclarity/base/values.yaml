@@ -1,0 +1,182 @@
+# KubeClarity Helm values - detailed defaults and commented options
+# Derived from chart defaults and filled with example production-friendly settings.
+# Edit carefully: this file is used as the base values for all overlays.
+
+# --------------------
+# Global / image config
+# --------------------
+image:
+  repository: ghcr.io/openclarity
+  tag: "kubeclarity:2.23.3"        # chart may override; use exact image tag if desired
+  pullPolicy: IfNotPresent
+  # imagePullSecrets: []           # list if using private registry
+
+replicaCount:
+  frontend: 2
+  backend: 2
+  analyzer: 1
+
+# --------------
+# Service / ingress
+# --------------
+service:
+  type: ClusterIP
+  port: 8080
+  annotations: {}
+
+ingress:
+  enabled: false
+  annotations: {}
+  hosts:
+    - host: kubeclarity.example.local
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  tls:
+    - secretName: kubeclarity-tls
+      hosts:
+        - kubeclarity.example.local
+
+# ----------------
+# Persistence
+# ----------------
+persistence:
+  enabled: true
+  storageClass: ""    # use cluster default if blank
+  size: 5Gi
+
+# ----------------
+# PostgreSQL (bundled)
+# ----------------
+kubeclarity-postgresql:
+  enabled: true
+  fullnameOverride: ""
+  postgresqlUsername: kubeclarity
+  postgresqlPassword: "change-me-password"  # replace with sealed secret/secret manager in production
+  postgresqlDatabase: kubeclaritydb
+  persistence:
+    enabled: true
+    size: 5Gi
+    storageClass: ""
+  resources:
+    requests:
+      cpu: 250m
+      memory: 256Mi
+    limits:
+      cpu: 500m
+      memory: 512Mi
+
+# To use external DB instead:
+# kubeclarity-postgresql.enabled: false
+# global.postgresql.host: <host>
+# global.postgresql.port: 5432
+# global.postgresql.user: <user>
+# global.postgresql.password: <password>
+
+# ----------------
+# Authentication / UI
+# ----------------
+ui:
+  auth:
+    enabled: false           # true if you want KubeClarity internal auth (or use proxy / OIDC)
+    username: "admin"
+    password: "admin"        # rotate & store in sealed secret
+  basePath: "/"
+  serviceAccount:
+    create: true
+
+# ----------------
+# Vulnerability scanners & analyzers
+# ----------------
+vulnerabilityScanner:
+  clair:
+    enabled: false
+  trivy:
+    enabled: true
+    # trivy-specific configuration
+    db:
+      updateInterval: 12h
+  anchore:
+    enabled: false
+
+analyzer:
+  enabled: true
+  # concurrency limits & resource requests
+  resources:
+    requests:
+      cpu: 250m
+      memory: 512Mi
+    limits:
+      cpu: 1
+      memory: 1Gi
+
+# ----------------
+# Resource requests/limits for core components
+# ----------------
+resources:
+  frontend:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      cpu: 500m
+      memory: 512Mi
+  api:
+    requests:
+      cpu: 250m
+      memory: 256Mi
+    limits:
+      cpu: 1
+      memory: 1Gi
+
+# ---------------
+# Node scheduling
+# ---------------
+nodeSelector: {}
+tolerations: []
+affinity: {}
+
+# ---------------
+# Observability
+# ---------------
+metrics:
+  enabled: true
+  serviceMonitor:
+    enabled: false           # set true if you use Prometheus Operator
+  prometheus:
+    annotations: {}
+
+# ---------------
+# Extra config / env
+# ---------------
+extraEnv: []
+# Example:
+# extraEnv:
+#   - name: "TZ"
+#     value: "UTC"
+
+# ---------------
+# SecurityContext (pod-level)
+# ---------------
+securityContext:
+  runAsUser: 1000
+  runAsGroup: 3000
+  fsGroup: 2000
+
+# ---------------
+# RBAC
+# ---------------
+rbac:
+  create: true
+
+# ---------------
+# Misc
+# ---------------
+logLevel: "info"
+# probes
+livenessProbe:
+  initialDelaySeconds: 30
+  periodSeconds: 10
+readinessProbe:
+  initialDelaySeconds: 10
+  periodSeconds: 5
