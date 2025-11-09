@@ -14,5 +14,5 @@ helmCharts:
     namespace: kubeclarity
     valuesFile: values-patch.yaml
 
-labels:
+commonLabels:
   env: dev

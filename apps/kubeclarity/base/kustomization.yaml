@@ -5,6 +5,6 @@ namespace: kubeclarity
 resources:
   - namespace.yaml
 
-labels:
+commonLabels:
   app.kubernetes.io/name: kubeclarity
   app.kubernetes.io/managed-by: argocd-gitops
