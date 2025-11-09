@@ -1,0 +1,12 @@
+# overlays/staging/postgres-image-patch.yaml
+apiVersion: apps/v1
+kind: StatefulSet            # or Deployment if that's what the chart creates
+metadata:
+  name: kubeclarity-postgresql   # change to the actual resource name
+spec:
+  template:
+    spec:
+      containers:
+        - name: postgresql       # container name in the manifested resource (change if needed)
+          image: postgres:14.6   # new image (official)
+          imagePullPolicy: IfNotPresent

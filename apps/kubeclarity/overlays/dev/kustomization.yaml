@@ -5,6 +5,9 @@ namespace: kubeclarity
 resources:
   - ../../base
 
+patchesStrategicMerge:
+  - postgres-image-patch.yaml
+
 # Define helmCharts here so valuesFile can be overlay-specific:
 helmCharts:
   - name: kubeclarity
