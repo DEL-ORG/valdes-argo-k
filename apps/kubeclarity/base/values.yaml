@@ -5,10 +5,12 @@
 # --------------------
 # Global / image config
 # --------------------
-image:
-  repository: ghcr.io/openclarity
-  tag: "kubeclarity:2.23.3"        # chart may override; use exact image tag if desired
-  pullPolicy: IfNotPresent
+kubeclarity-postgresql:
+  image:
+    registry: docker.io
+    repository: bitnami/postgresql
+    tag: "14.6.0-debian-11-r30"   # replace with a tag you validated exists
+    pullPolicy: IfNotPresent
   # imagePullSecrets: []           # list if using private registry
 
 replicaCount:
