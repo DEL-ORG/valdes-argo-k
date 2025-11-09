@@ -1,6 +1,6 @@
 # overlays/staging/postgres-image-patch.yaml
 apiVersion: apps/v1
-kind: StatefulSet            # or Deployment if that's what the chart creates
+kind: Deployment           # or Deployment if that's what the chart creates
 metadata:
   name: kubeclarity-postgresql   # change to the actual resource name
 spec:
