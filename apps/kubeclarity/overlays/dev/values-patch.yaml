@@ -1,4 +1,13 @@
-# dev-specific smaller footprint values
+# apps/kubeclarity/overlays/dev/values-patch.yaml
+kubeclarity-postgresql:
+  enabled: true
+  image:
+    repository: postgres
+    tag: "15"
+    pullPolicy: IfNotPresent
+  persistence:
+    enabled: false   # dev only: speeds up start; remove/true for staging/prod
+
 ingress:
   enabled: false
 
