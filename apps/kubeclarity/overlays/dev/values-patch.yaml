@@ -29,5 +29,10 @@ resources:
       memory: 512Mi
 
 # Use cluster-local image overrides (if you maintain staging images)
-image:
-  tag: "kubeclarity:dev-latest"
+kubeclarity-postgresql:
+  image:
+    registry: docker.io
+    repository: bitnami/postgresql
+    tag: "14.6.0-debian-11-r30"   # replace with a tag you validated exists
+    pullPolicy: IfNotPresent
+
