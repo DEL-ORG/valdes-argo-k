@@ -13,8 +13,8 @@ kubeclarity-postgresql:
   # imagePullSecrets: []           # list if using private registry
 
 replicaCount:
-  frontend: 2
-  backend: 2
+  frontend: 1
+  backend: 1
   analyzer: 1
 
 # --------------

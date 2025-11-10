@@ -12,9 +12,9 @@ ingress:
         - kubeclarity.example.company
 
 replicaCount:
-  frontend: 3
-  backend: 3
-  analyzer: 2
+  frontend: 1
+  backend: 1
+  analyzer: 1
 
 kubeclarity-postgresql:
   enabled: true
