@@ -2,7 +2,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: kubeclarity-prod
+  name: kubeclarity-dev
   namespace: argocd
 spec:
   project: platform-tools
