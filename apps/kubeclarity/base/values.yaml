@@ -5,11 +5,11 @@
 # --------------------
 # Global / image config
 # --------------------
-kubeclarity-postgresql:
+postgresql:
+  enabled: true
   image:
-    registry: docker.io
-    repository: bitnami/postgresql
-    tag: "14.6.0-debian-11-r30"   # replace with a tag you validated exists
+    repository: docker.io/bitnami/postgresql
+    tag: 14.12.0-debian-12-r2
     pullPolicy: IfNotPresent
   # imagePullSecrets: []           # list if using private registry
 

@@ -54,9 +54,3 @@ ui:
 #     password: "<SECRET_FROM_VAULT>"
 #     db: "kubeclaritydb"
 
-kubeclarity-postgresql:
-  image:
-    registry: docker.io
-    repository: bitnami/postgresql
-    tag: "14.6.0-debian-11-r30"   # replace with a tag you validated exists
-    pullPolicy: IfNotPresent
