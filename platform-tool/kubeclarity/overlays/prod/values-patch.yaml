@@ -1,0 +1,113 @@
+# platform-tools/kubeclarity/overlays/prod/values.yaml
+global:
+  imagePullSecrets: ["regcred-prod"]
+  labels: {}
+  annotations: {}
+
+backend:
+  enabled: true
+  replicaCount: 3
+  image:
+    repository: ghcr.io/openclarity/kubeclarity-backend
+    tag: "v2.23.3"
+    pullPolicy: IfNotPresent
+  resources:
+    requests:
+      cpu: 500m
+      memory: 1Gi
+    limits:
+      cpu: 2
+      memory: 4Gi
+  persistence:
+    enabled: true
+    storageClass: "fast-ssd"
+    accessMode: ReadWriteOnce
+    size: 50Gi
+
+ui:
+  enabled: true
+  replicaCount: 2
+  image:
+    repository: ghcr.io/openclarity/kubeclarity-ui
+    tag: "v2.23.3"
+    pullPolicy: IfNotPresent
+  service:
+    type: ClusterIP
+    port: 8080
+
+db:
+  external:
+    enabled: true
+    host: "prod-postgres.db.svc.cluster.local"
+    port: 5432
+    user: "kubeclarity"
+    password: "REPLACE_WITH_SECRET"   # use Kubernetes Secret; do not put plaintext in git
+    database: "kubeclarity"
+
+ingress:
+  enabled: true
+  hosts:
+    - host: kubeclarity.example.com
+      paths:
+        - path: /
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    nginx.ingress.kubernetes.io/proxy-body-size: "50m"
+
+scanners:
+  trivy:
+    enabled: true
+    image:
+      repository: ghcr.io/aquasecurity/trivy
+      tag: "0.44.0"
+  grype:
+    enabled: true
+    image:
+      repository: ghcr.io/anchore/grype
+      tag: "0.71.0"
+
+runtime:
+  scanInterval: "6h"
+  enableRuntimeScan: true
+
+security:
+  rbac:
+    create: true
+  podSecurityPolicy:
+    enabled: false
+
+nodeSelector:
+  kubernetes.io/role: worker
+
+tolerations:
+  - key: "node-role.kubernetes.io/infra"
+    operator: "Exists"
+    effect: "NoSchedule"
+
+affinity:
+  podAntiAffinity:
+    requiredDuringSchedulingIgnoredDuringExecution:
+      - labelSelector:
+          matchExpressions:
+            - key: app.kubernetes.io/name
+              operator: In
+              values:
+                - kubeclarity
+        topologyKey: "kubernetes.io/hostname"
+
+serviceAccount:
+  create: true
+  name: kubeclarity-sa
+
+features:
+  sbomGeneration: true
+  vulnerabilityScanning: true
+  runtimeScanning: true
+
+prometheus:
+  enabled: true
+  serviceMonitor:
+    enabled: true
+
+imagePullSecrets:
+  - name: regcred-prod

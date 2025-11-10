@@ -1,0 +1,96 @@
+# platform-tools/kubeclarity/overlays/stage/values.yaml
+global:
+  imagePullSecrets: ["regcred"]    # example secret name present in kubeclarity ns
+  labels: {}
+  annotations: {}
+
+backend:
+  enabled: true
+  replicaCount: 2
+  image:
+    repository: ghcr.io/openclarity/kubeclarity-backend
+    tag: "v2.23.3"
+    pullPolicy: IfNotPresent
+  resources:
+    requests:
+      cpu: 250m
+      memory: 512Mi
+    limits:
+      cpu: 1
+      memory: 1Gi
+  persistence:
+    enabled: true
+    storageClass: ""
+    accessMode: ReadWriteOnce
+    size: 5Gi
+
+ui:
+  enabled: true
+  replicaCount: 2
+  image:
+    repository: ghcr.io/openclarity/kubeclarity-ui
+    tag: "v2.23.3"
+    pullPolicy: IfNotPresent
+  service:
+    type: ClusterIP
+    port: 8080
+
+db:
+  external:
+    enabled: false
+
+ingress:
+  enabled: true
+  hosts:
+    - host: kubeclarity-stage.example.internal
+      paths:
+        - path: /
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+
+scanners:
+  trivy:
+    enabled: true
+    image:
+      repository: ghcr.io/aquasecurity/trivy
+      tag: "0.44.0"
+  grype:
+    enabled: true
+    image:
+      repository: ghcr.io/anchore/grype
+      tag: "0.71.0"
+
+runtime:
+  scanInterval: "12h"
+  enableRuntimeScan: true
+
+security:
+  rbac:
+    create: true
+
+nodeSelector:
+  kubernetes.io/os: linux
+
+tolerations:
+  - key: "dedicated"
+    operator: "Equal"
+    value: "platform"
+    effect: "NoSchedule"
+
+affinity: {}
+
+serviceAccount:
+  create: true
+  name: kubeclarity-sa
+
+features:
+  sbomGeneration: true
+  vulnerabilityScanning: true
+  runtimeScanning: true
+
+prometheus:
+  enabled: true
+
+imagePullSecrets:
+  - name: regcred
+

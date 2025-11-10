@@ -1,0 +1,93 @@
+# platform-tools/kubeclarity/overlays/dev/values.yaml
+global:
+  # If you need to pull from a private registry, put secret names here (namespace must contain the secret)
+  imagePullSecrets: []
+  # Optional global labels/annotations
+  labels: {}
+  annotations: {}
+
+backend:
+  enabled: true
+  replicaCount: 1
+  image:
+    repository: ghcr.io/openclarity/kubeclarity-backend
+    tag: "v2.23.3"     # pin to release tag where possible (recommend not using :latest)
+    pullPolicy: IfNotPresent
+  resources:
+    requests:
+      cpu: 100m
+      memory: 256Mi
+    limits:
+      cpu: 500m
+      memory: 512Mi
+  persistence:
+    enabled: false
+
+ui:
+  enabled: true
+  replicaCount: 1
+  image:
+    repository: ghcr.io/openclarity/kubeclarity-ui
+    tag: "v2.23.3"
+    pullPolicy: IfNotPresent
+  service:
+    type: ClusterIP
+    port: 8080
+
+db:
+  # KubeClarity supports different DB backends in the chart; using builtin (sqlite/postgres) depends on chart.
+  # For dev we use the chart's internal DB if available (no external DB).
+  external:
+    enabled: false
+    host: ""
+    port: 5432
+    user: ""
+    password: ""
+    database: ""
+
+ingress:
+  enabled: false
+  hosts: []
+  annotations: {}
+
+scanners:
+  trivy:
+    enabled: true
+    image:
+      repository: ghcr.io/aquasecurity/trivy
+      tag: "0.44.0"  # example; pin to a stable tag you tested
+  grype:
+    enabled: true
+    image:
+      repository: ghcr.io/anchore/grype
+      tag: "0.71.0"
+
+runtime:
+  scanInterval: "24h"
+  enableRuntimeScan: false
+
+security:
+  rbac:
+    create: true
+
+nodeSelector: {}
+tolerations: []
+affinity: {}
+
+serviceAccount:
+  create: true
+  name: kubeclarity-sa
+
+# Optional extra feature toggles
+features:
+  sbomGeneration: true
+  vulnerabilityScanning: true
+  runtimeScanning: false
+
+# Monitoring / Metrics
+prometheus:
+  enabled: false
+
+# Image pull secrets (useful if you have internal registry credentials)
+imagePullSecrets: []
+

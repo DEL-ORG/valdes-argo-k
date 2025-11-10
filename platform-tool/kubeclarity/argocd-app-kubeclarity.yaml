@@ -1,14 +1,16 @@
+# platform-tools/kubeclarity/argocd-app-kubeclarity.yaml
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: kubeclarity-dev
+  name: kubeclarity-prod
   namespace: argocd
 spec:
   project: platform-tools
   source:
     repoURL: 'https://github.com/DEL-ORG/valdes-argo-k.git'
     targetRevision: HEAD
-    path: 'apps/kubeclarity/overlays/dev'
+    path: 'platform-tools/kubeclarity/overlays/dev'
+    # We rely on ArgoCD's kustomize to render helmCharts in kustomization
   destination:
     server: 'https://kubernetes.default.svc'
     namespace: kubeclarity

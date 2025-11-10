@@ -1,17 +1,14 @@
+# platform-tools/kubeclarity/overlays/stage/kustomization.yaml
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
-namespace: kubeclarity
-
 resources:
   - ../../base
 
 helmCharts:
   - name: kubeclarity
     repo: https://openclarity.github.io/kubeclarity
-    version: "v2.23.3"
+    version: "2.23.3"
     releaseName: kubeclarity
-    namespace: kubeclarity
-    valuesFile: values-patch.yaml
+    valuesFile: values.yaml
 
-commonLabels:
-  env: staging
+namespace: kubeclarity
