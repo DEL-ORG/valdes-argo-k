@@ -1,0 +1,32 @@
+# Disable built-in Bitnami Postgres chart
+postgresql:
+  enabled: false
+
+# External database configuration
+db:
+  host: kubeclarity-postgres
+  port: 5432
+  user: kubeclarity
+  passwordSecret:
+    name: kubeclarity-db-secret
+    key: POSTGRES_PASSWORD
+  database: kubeclarity
+  sslmode: disable
+
+# App configuration
+image:
+  repository: ghcr.io/openclarity/kubeclarity
+  tag: v2.23.3
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  port: 8080
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 256Mi
+  limits:
+    cpu: 500m
+    memory: 512Mi
