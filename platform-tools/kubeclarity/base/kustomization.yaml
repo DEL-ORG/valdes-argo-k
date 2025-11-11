@@ -4,5 +4,5 @@ namespace: kubeclarity
 
 resources:
   - namespace.yaml
-  - postgres/secret.yaml
+  - postgres
 
