@@ -1,9 +1,8 @@
-# platform-tools/kubeclarity/base/kustomization.yaml
-# platform-tools/kubeclarity/base/kustomization.yaml
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
+namespace: kubeclarity
+
 resources:
   - namespace.yaml
-  - postgres
-
+  - postgres/secret.yaml
 
