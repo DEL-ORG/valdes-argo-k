@@ -14,6 +14,20 @@ spec:
       labels:
         app: kubeclarity-postgres
     spec:
+      initContainers:
+        - name: init-postgres-dir
+          image: busybox
+          command:
+            - sh
+            - -c
+            - |
+              set -eux
+              # create PGDATA subdir and ensure ownership (999:999 typical for postgres)
+              mkdir -p /var/lib/postgresql/data/pgdata
+              chown -R 999:999 /var/lib/postgresql/data
+          volumeMounts:
+            - name: postgres-data
+              mountPath: /var/lib/postgresql/data
       containers:
         - name: postgres
           image: postgres:15.3
@@ -34,6 +48,8 @@ spec:
                 secretKeyRef:
                   name: kubeclarity-db-secret
                   key: POSTGRES_DB
+            - name: PGDATA
+              value: /var/lib/postgresql/data/pgdata
           ports:
             - containerPort: 5432
           volumeMounts:
@@ -43,3 +59,4 @@ spec:
         - name: postgres-data
           persistentVolumeClaim:
             claimName: postgres-pvc
+
