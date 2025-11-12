@@ -3,7 +3,7 @@ kind: ClusterPolicy
 metadata:
   name: enforce-pvc-size-limit
 spec:
-  validationFailureAction: enforce
+  validationFailureAction: Enforce
   background: false
   rules:
   - name: pvc-capacity-max-4Gi
@@ -15,6 +15,7 @@ spec:
       resources:
         namespaces:
         - connect-apps
+    # Move preconditions to rule level
     preconditions:
       - key: "{{request.operation}}"
         operator: In
@@ -23,7 +24,8 @@ spec:
         - UPDATE
       - key: "{{request.object.spec.resources.requests.storage}}"
         operator: NotEquals
-        value: null
+        # require a non-empty value (empty string)
+        value: ""
     validate:
       message: "PVC storage request must be 4Gi or less. Allowed examples: 1Gi,2Gi,3Gi,4Gi."
       anyPattern:
@@ -40,6 +42,6 @@ spec:
             requests:
               storage: "3Gi"
       - spec:
-          resources:
+          resources            :
             requests:
               storage: "4Gi"

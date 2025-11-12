@@ -3,7 +3,7 @@ kind: ClusterPolicy
 metadata:
   name: generate-namespace-resourcequota
 spec:
-  validationFailureAction: enforce
+  validationFailureAction: Enforce
   background: true
   rules:
   - name: generate-platform-quota
@@ -24,8 +24,12 @@ spec:
         - default
         - connect-apps
     generate:
+      # Generate a namespaced ResourceQuota; apiVersion and namespace are required
+      apiVersion: v1
       kind: ResourceQuota
       name: platform-quota
+      # put the generated ResourceQuota into the same namespace as the Namespace object
+      namespace: "{{request.object.metadata.name}}"
       synchronize: true
       data:
         metadata:

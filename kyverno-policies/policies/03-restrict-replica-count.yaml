@@ -3,7 +3,8 @@ kind: ClusterPolicy
 metadata:
   name: restrict-replica-count
 spec:
-  validationFailureAction: enforce
+  # Use capitalized mode to avoid deprecation warnings
+  validationFailureAction: Enforce
   background: false
   rules:
   - name: deny-replicas-greater-than-2
@@ -19,13 +20,11 @@ spec:
         namespaces:
         - connect-apps
         - traefik
+    # preconditions must be at the rule level
     preconditions:
-      - key: "{{request.object.spec.replicas}}"
-        operator: NotEquals
-        value: null
       - key: "{{request.object.spec.replicas}}"
         operator: GreaterThan
         value: 2
     validate:
-      message: "Replicas must be 0, 1 or 2 (maximum 2)."
+      message: "Replicas must be 0, 1, or 2 (maximum 2)."
       deny: {}

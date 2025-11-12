@@ -3,7 +3,7 @@ kind: ClusterPolicy
 metadata:
   name: deny-plaintext-envvars
 spec:
-  validationFailureAction: enforce
+  validationFailureAction: Enforce
   background: false
   rules:
   - name: deny-env-value-in-containers
@@ -16,14 +16,14 @@ spec:
         - StatefulSet
         - Job
         - CronJob
+    # preconditions at rule level
     preconditions:
-      any:
       - key: "{{request.object.spec.containers.*.env.*.value}}"
         operator: NotEquals
-        value: null
+        value: ""
       - key: "{{request.object.spec.initContainers.*.env.*.value}}"
         operator: NotEquals
-        value: null
+        value: ""
     validate:
       message: "Plaintext environment variables are disallowed. Use valueFrom with secretKeyRef or configMapKeyRef."
       deny: {}
