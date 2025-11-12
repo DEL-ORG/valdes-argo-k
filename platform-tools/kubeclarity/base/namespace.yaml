@@ -1,7 +1,0 @@
-# platform-tools/kubeclarity/base/namespace.yaml
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: kubeclarity
-  labels:
-    app.kubernetes.io/name: kubeclarity

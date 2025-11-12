@@ -1,0 +1,26 @@
+global:
+  createNamespace: true
+
+postgresql:
+  enabled: true
+  auth:
+    username: kubeclarity
+    password: devpass123
+    database: kubeclarity
+
+service:
+  type: ClusterIP
+  port: 8080
+
+ingress:
+  enabled: false
+
+resources:
+  limits:
+    cpu: 500m
+    memory: 512Mi
+  requests:
+    cpu: 250m
+    memory: 256Mi
+
+imagePullPolicy: IfNotPresent

@@ -1,0 +1,31 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: kubeclarity
+  namespace: argocd
+  labels:
+    app.kubernetes.io/name: kubeclarity
+    app.kubernetes.io/part-of: platform-tools
+spec:
+  project: default
+  sources:
+    - repoURL: 'https://github.com/DEL-ORG/valdes-argo-k.git'
+      targetRevision: HEAD                                    
+      ref: values
+    - repoURL: 'https://openclarity.github.io/kubeclarity'
+      chart: kubeclarity
+      targetRevision: "2.23.3"
+      helm:
+        releaseName: kubeclarity
+        valueFiles:
+          - $values/charts/kubeclarity/dev-values.yaml  # overlay will patch for prod
+  destination:
+    name: in-cluster
+    namespace: kubeclarity
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true

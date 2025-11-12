@@ -1,0 +1,42 @@
+global:
+  createNamespace: true
+
+postgresql:
+  enabled: true
+  auth:
+    username: kubeclarity
+    password: prod-secure-pass
+    database: kubeclarity
+  primary:
+    persistence:
+      enabled: true
+      size: 2Gi
+
+service:
+  type: ClusterIP
+  port: 8080
+
+ingress:
+  enabled: true
+  className: nginx
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+  hosts:
+    - host: kubeclarity.example.com
+      paths:
+        - path: /
+          pathType: Prefix
+  tls:
+    - secretName: kubeclarity-tls
+      hosts:
+        - kubeclarity.example.com
+
+resources:
+  limits:
+    cpu: 1
+    memory: 1Gi
+  requests:
+    cpu: 500m
+    memory: 512Mi
+
+imagePullPolicy: IfNotPresent
