@@ -18,7 +18,7 @@ spec:
       helm:
         releaseName: kubeclarity
         valueFiles:
-          - $values/charts/kubeclarity/dev-values.yaml  # overlay will patch for prod
+          - charts/kubeclarity/dev-values.yaml
   destination:
     name: in-cluster
     namespace: kubeclarity
