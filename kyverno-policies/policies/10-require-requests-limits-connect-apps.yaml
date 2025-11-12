@@ -1,0 +1,40 @@
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: require-requests-limits-connect-apps
+spec:
+  validationFailureAction: enforce
+  background: false
+  rules:
+  - name: containers-must-have-requests-and-limits
+    match:
+      resources:
+        kinds:
+        - Pod
+        - Deployment
+        - DaemonSet
+        - StatefulSet
+        - Job
+        - CronJob
+        namespaces:
+        - connect-apps
+    validate:
+      message: "Each container must define CPU and memory requests and limits (requests: cpu,memory and limits: cpu,memory)."
+      pattern:
+        spec:
+          containers:
+          - resources:
+              requests:
+                cpu: "?*"
+                memory: "?*"
+              limits:
+                cpu: "?*"
+                memory: "?*"
+          initContainers:
+          - resources:
+              requests:
+                cpu: "?*"
+                memory: "?*"
+              limits:
+                cpu: "?*"
+                memory: "?*"

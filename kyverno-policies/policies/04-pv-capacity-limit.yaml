@@ -1,0 +1,34 @@
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: enforce-pv-size-limit
+spec:
+  validationFailureAction: enforce
+  background: false
+  rules:
+  - name: pv-capacity-max-4Gi
+    match:
+      resources:
+        kinds:
+        - PersistentVolume
+    preconditions:
+      - key: "{{request.operation}}"
+        operator: In
+        value:
+        - CREATE
+        - UPDATE
+    validate:
+      message: "PersistentVolume capacity must be 4Gi or less. Allowed examples: 1Gi,2Gi,3Gi,4Gi."
+      anyPattern:
+      - spec:
+          capacity:
+            storage: "1Gi"
+      - spec:
+          capacity:
+            storage: "2Gi"
+      - spec:
+          capacity:
+            storage: "3Gi"
+      - spec:
+          capacity:
+            storage: "4Gi"

@@ -1,0 +1,35 @@
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: connect-apps-deployment-controls
+spec:
+  validationFailureAction: enforce
+  background: false
+  rules:
+  - name: deployment-name-must-start-with-connect
+    match:
+      resources:
+        kinds:
+        - Deployment
+        namespaces:
+        - connect-apps
+    validate:
+      message: "Deployment resource names in connect-apps must start with 'connect-'."
+      pattern:
+        metadata:
+          name: "connect-*"
+
+  - name: deployment-must-use-connect-serviceaccount
+    match:
+      resources:
+        kinds:
+        - Deployment
+        namespaces:
+        - connect-apps
+    validate:
+      message: "Deployments in connect-apps must use the predefined service account 'CONNECT_SERVICE_ACCOUNT'."
+      pattern:
+        spec:
+          template:
+            spec:
+              serviceAccountName: "CONNECT_SERVICE_ACCOUNT"

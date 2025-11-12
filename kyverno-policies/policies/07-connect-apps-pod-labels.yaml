@@ -1,0 +1,22 @@
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: connect-apps-pod-labels
+spec:
+  validationFailureAction: enforce
+  background: false
+  rules:
+  - name: pod-must-have-app-and-service-labels
+    match:
+      resources:
+        kinds:
+        - Pod
+        namespaces:
+        - connect-apps
+    validate:
+      message: "Pod must include labels: app=connect and service=<non-empty-value>."
+      pattern:
+        metadata:
+          labels:
+            app: "connect"
+            service: "?*"

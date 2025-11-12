@@ -1,0 +1,33 @@
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: deny-delete-listed-namespaces
+spec:
+  validationFailureAction: enforce
+  background: false
+  rules:
+  - name: deny-delete-named-namespaces
+    match:
+      resources:
+        kinds:
+        - Namespace
+    preconditions:
+      all:
+      - key: "{{request.operation}}"
+        operator: Equals
+        value: "DELETE"
+      - key: "{{request.name}}"
+        operator: In
+        value:
+        - connect-apps
+        - traefik
+        - default
+        - kube-system
+        - kube-public
+        - kube-node-lease
+        - linkerd
+        - linkerd-viz
+        - cert-manager
+    validate:
+      message: "Deletion of a protected namespace is forbidden by platform governance."
+      deny: {}

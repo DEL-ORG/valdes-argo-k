@@ -1,0 +1,30 @@
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: enforce-connect-apps-image-registry
+spec:
+  validationFailureAction: enforce
+  background: false
+  rules:
+  - name: allow-only-approved-registry
+    match:
+      resources:
+        kinds:
+        - Pod
+        - Deployment
+        - DaemonSet
+        - StatefulSet
+        - Job
+        - CronJob
+        namespaces:
+        - connect-apps
+    validate:
+      message: "Images must be pulled from 597088047986.dkr.ecr.us-east-1.amazonaws.com"
+      # This pattern enforces that at least one container matches the registry prefix.
+      # For strictness across *all* containers, use `foreach` or duplicate for multiple containers depending on Kyverno version.
+      anyPattern:
+      - spec:
+          containers:
+          - image: "597088047986.dkr.ecr.us-east-1.amazonaws.com/*"
+          initContainers:
+          - image: "597088047986.dkr.ecr.us-east-1.amazonaws.com/*"

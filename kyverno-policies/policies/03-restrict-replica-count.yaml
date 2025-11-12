@@ -1,0 +1,31 @@
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: restrict-replica-count
+spec:
+  validationFailureAction: enforce
+  background: false
+  rules:
+  - name: deny-replicas-greater-than-2
+    match:
+      resources:
+        kinds:
+        - Deployment
+        - StatefulSet
+        - ReplicaSet
+        - ReplicationController
+    exclude:
+      resources:
+        namespaces:
+        - connect-apps
+        - traefik
+    preconditions:
+      - key: "{{request.object.spec.replicas}}"
+        operator: NotEquals
+        value: null
+      - key: "{{request.object.spec.replicas}}"
+        operator: GreaterThan
+        value: 2
+    validate:
+      message: "Replicas must be 0, 1 or 2 (maximum 2)."
+      deny: {}

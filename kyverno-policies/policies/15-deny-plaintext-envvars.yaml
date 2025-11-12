@@ -1,0 +1,29 @@
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: deny-plaintext-envvars
+spec:
+  validationFailureAction: enforce
+  background: false
+  rules:
+  - name: deny-env-value-in-containers
+    match:
+      resources:
+        kinds:
+        - Pod
+        - Deployment
+        - DaemonSet
+        - StatefulSet
+        - Job
+        - CronJob
+    preconditions:
+      any:
+      - key: "{{request.object.spec.containers.*.env.*.value}}"
+        operator: NotEquals
+        value: null
+      - key: "{{request.object.spec.initContainers.*.env.*.value}}"
+        operator: NotEquals
+        value: null
+    validate:
+      message: "Plaintext environment variables are disallowed. Use valueFrom with secretKeyRef or configMapKeyRef."
+      deny: {}

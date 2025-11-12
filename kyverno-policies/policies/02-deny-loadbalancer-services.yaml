@@ -1,0 +1,24 @@
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: deny-loadbalancer-services
+spec:
+  validationFailureAction: enforce
+  background: false
+  rules:
+  - name: deny-service-loadbalancer
+    match:
+      resources:
+        kinds:
+        - Service
+    exclude:
+      resources:
+        namespaces:
+        - traefik
+    preconditions:
+      - key: "{{request.object.spec.type}}"
+        operator: Equals
+        value: "LoadBalancer"
+    validate:
+      message: "Service of type LoadBalancer is only allowed in the traefik namespace."
+      deny: {}

@@ -1,0 +1,45 @@
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: enforce-pvc-size-limit
+spec:
+  validationFailureAction: enforce
+  background: false
+  rules:
+  - name: pvc-capacity-max-4Gi
+    match:
+      resources:
+        kinds:
+        - PersistentVolumeClaim
+    exclude:
+      resources:
+        namespaces:
+        - connect-apps
+    preconditions:
+      - key: "{{request.operation}}"
+        operator: In
+        value:
+        - CREATE
+        - UPDATE
+      - key: "{{request.object.spec.resources.requests.storage}}"
+        operator: NotEquals
+        value: null
+    validate:
+      message: "PVC storage request must be 4Gi or less. Allowed examples: 1Gi,2Gi,3Gi,4Gi."
+      anyPattern:
+      - spec:
+          resources:
+            requests:
+              storage: "1Gi"
+      - spec:
+          resources:
+            requests:
+              storage: "2Gi"
+      - spec:
+          resources:
+            requests:
+              storage: "3Gi"
+      - spec:
+          resources:
+            requests:
+              storage: "4Gi"

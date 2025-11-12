@@ -1,0 +1,37 @@
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: generate-namespace-resourcequota
+spec:
+  validationFailureAction: enforce
+  background: true
+  rules:
+  - name: generate-platform-quota
+    match:
+      resources:
+        kinds:
+        - Namespace
+    exclude:
+      resources:
+        names:
+        - kube-system
+        - kube-public
+        - kube-node-lease
+        - cert-manager
+        - linkerd
+        - linkerd-viz
+        - traefik
+        - default
+        - connect-apps
+    generate:
+      kind: ResourceQuota
+      name: platform-quota
+      synchronize: true
+      data:
+        metadata:
+          name: platform-quota
+        spec:
+          hard:
+            "count/deployments.apps": "20"
+            "count/services": "20"
+            "count/persistentvolumeclaims": "10"

@@ -1,0 +1,26 @@
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: require-versioned-image-tags
+spec:
+  validationFailureAction: enforce
+  background: false
+  rules:
+  - name: require-semver-like-tags
+    match:
+      resources:
+        kinds:
+        - Pod
+        - Deployment
+        - DaemonSet
+        - StatefulSet
+        - Job
+        - CronJob
+    validate:
+      message: "Image tags must be immutable and versioned (e.g., v1.2.3)."
+      anyPattern:
+      - spec:
+          containers:
+          - image: "*:v*.*.*"
+          initContainers:
+          - image: "*:v*.*.*"

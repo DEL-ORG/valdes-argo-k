@@ -1,0 +1,18 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: connect-bad
+  namespace: connect-apps
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: bad
+  template:
+    metadata:
+      labels:
+        app: bad
+    spec:
+      containers:
+      - name: test
+        image: 597088047986.dkr.ecr.us-east-1.amazonaws.com/myapp:v1.0.0

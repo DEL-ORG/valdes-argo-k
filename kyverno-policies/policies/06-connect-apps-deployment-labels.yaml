@@ -1,0 +1,26 @@
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: connect-apps-deployment-labels
+spec:
+  validationFailureAction: enforce
+  background: false
+  rules:
+  - name: deployment-must-have-app-and-service-labels
+    match:
+      resources:
+        kinds:
+        - Deployment
+        namespaces:
+        - connect-apps
+    validate:
+      message: "Deployment must have metadata.labels.app=connect and spec.template.metadata.labels.service must equal the deployment name."
+      pattern:
+        metadata:
+          labels:
+            app: "connect"
+        spec:
+          template:
+            metadata:
+              labels:
+                service: "{{request.object.metadata.name}}"
