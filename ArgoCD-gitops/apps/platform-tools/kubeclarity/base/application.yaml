@@ -8,20 +8,29 @@ metadata:
     app.kubernetes.io/part-of: platform-tools
 spec:
   project: default
+
+  # 1) Helm chart source (external chart repo)
   sources:
-    - repoURL: 'https://github.com/DEL-ORG/valdes-argo-k.git'
-      targetRevision: HEAD                                    
-      ref: values
-    - repoURL: 'https://openclarity.github.io/kubeclarity'
+    - repoURL: "https://openclarity.github.io/kubeclarity"
       chart: kubeclarity
       targetRevision: "2.23.3"
       helm:
         releaseName: kubeclarity
         valueFiles:
-          - charts/kubeclarity/dev-values.yaml
+          - $values/charts/kubeclarity/dev-values.yaml
+
+    # 2) Git source that contains the values file referred to by $values
+    - repoURL: "https://github.com/DEL-ORG/valdes-argo-k.git"
+      # IMPORTANT: ArgoCD requires a 'ref' (branch/tag/commit) for the source
+      # that supplies $values. Replace 'develop' with the branch you use (or 'main').
+      ref: "main"
+      # Optional: you can set path if your repo stores things under a subdir
+      # path: "apps/platform-tools/kubeclarity"   # optional, not required for $values resolution
+
   destination:
     name: in-cluster
     namespace: kubeclarity
+
   syncPolicy:
     automated:
       prune: true
