@@ -34,7 +34,13 @@ def run(cmd):
 
 def update_trivy_db():
     logging.info("Updating Trivy DB...")
-    subprocess.run([TRIVY, "--download-db-only"], check=False)
+    # compatible with new and old Trivy versions
+    try:
+        subprocess.run([TRIVY, "image", "--download-db-only"], check=True)
+    except subprocess.CalledProcessError:
+        logging.warning("`--download-db-only` not supported, using `--download-db-only` fallback...")
+        subprocess.run([TRIVY, "image", "--update"], check=False)
+
 
 def run_trivy_json(image):
     logging.info(f"Scanning {image} ...")
