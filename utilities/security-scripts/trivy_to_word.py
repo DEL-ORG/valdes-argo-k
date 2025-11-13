@@ -20,7 +20,7 @@ from docx import Document
 S3_BUCKET = os.getenv("S3_BUCKET", "security-trivy-reports")
 ARTIFACTS_DIR = Path("artifacts")
 MATTERMOST_WEBHOOK = os.getenv("MATTERMOST_WEBHOOK_URL")
-AWS_REGION = os.getenv("AWS_REGION", "us-east-1")
+AWS_REGION = os.getenv("AWS_REGION", "us-east-2")
 TRIVY = os.getenv("TRIVY_BINARY", "trivy")
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
