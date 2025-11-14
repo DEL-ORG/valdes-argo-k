@@ -15,7 +15,7 @@ spec:
       helm:
         releaseName: kubeclarity
         valueFiles:
-          - $values/apps/kubeclarity/base/values.yaml
+          - /apps/kubeclarity/base/values.yaml
     # this repo holds the values.yaml above (ref: values is required by ArgoCD to expand $values)
     - repoURL: "https://github.com/DEL-ORG/valdes-argo-k.git"
       targetRevision: HEAD
