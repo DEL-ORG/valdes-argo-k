@@ -1,0 +1,62 @@
+replicaCount: 3
+
+image:
+  repository: 597088047986.dkr.ecr.us-east-1.amazonaws.com/connect-frontend
+  tag: "76fb"
+  pullPolicy: IfNotPresent
+
+imagePullSecrets:
+  - name: ecr-pull-secret
+
+secret:
+  name: connect-frontend
+
+serviceAccount:
+  create: true
+  name: frontend-serviceaccount
+
+service:
+  type: NodePort
+  port: 3000
+  nodeport: 30726
+
+configMap:
+  enabled: true
+  name: connect-frontend
+  data:
+    NODE_ENV: "production"
+    API_URL: "https://backend.prod.webforxtech.com"
+
+autoscaling:
+  enabled: true
+  minReplicas: 2
+  maxReplicas: 5
+  targetCPUUtilizationPercentage: 70
+
+pdb:
+  enabled: true
+  minAvailable: 2
+
+networkPolicy:
+  enabled: true
+  ingress:
+    - from:
+        - podSelector: {}
+  egress:
+    - to:
+        - podSelector: {}
+
+ingress:
+  enabled: true
+  className: "nginx"
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+  hosts:
+    - host: frontend.prod.webforxtech.com
+      paths:
+        - path: /
+          pathType: Prefix
+  tls:
+    - secretName: prod-tls-secret
+      hosts:
+        - frontend.prod.webforxtech.com

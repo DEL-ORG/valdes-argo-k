@@ -1,0 +1,19 @@
+{{- if .Values.cronJob.enabled }}
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ include "connect-frontend.fullname" . }}-cache-warmup
+spec:
+  schedule: "{{ .Values.cronJob.schedule }}"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          serviceAccountName: {{ default (printf "%s-sa" .Chart.Name) .Values.serviceAccount.name }}
+          restartPolicy: {{ .Values.cronJob.restartPolicy | default "OnFailure" }}
+          containers:
+            - name: cache-warmup
+              image: "{{ .Values.cronJob.image.repository }}:{{ .Values.cronJob.image.tag }}"
+              imagePullPolicy: {{ .Values.cronJob.imagePullPolicy }}
+              command: {{ toJson .Values.cronJob.command }}
+{{- end }}

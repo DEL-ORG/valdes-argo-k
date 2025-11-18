@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "connect-frontend.fullname" . }}
+  labels:
+    {{ include "connect-frontend.labels" . | indent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount | default 1 }}
+  selector:
+    matchLabels:
+      app: {{ include "connect-frontend.fullname" . }}
+  template:
+    metadata:
+      labels:
+        app: {{ include "connect-frontend.fullname" . }}
+    spec:
+      {{- if .Values.imagePullSecrets }}
+      imagePullSecrets:
+{{ toYaml .Values.imagePullSecrets | indent 6 }}
+      {{- end }}
+      serviceAccountName: {{ default (printf "%s-sa" .Chart.Name) .Values.serviceAccount.name }}
+      securityContext:
+{{- if .Values.securityContext.enabled }}
+        runAsUser: {{ .Values.securityContext.runAsUser }}
+        runAsGroup: {{ .Values.securityContext.runAsGroup }}
+        fsGroup: {{ .Values.securityContext.fsGroup }}
+{{- end }}
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - containerPort: {{ .Values.service.port }}
+          readinessProbe:
+{{ toYaml .Values.readinessProbe | indent 12 }}
+          livenessProbe:
+{{ toYaml .Values.livenessProbe | indent 12 }}
+          resources:
+{{ toYaml .Values.resources | indent 12 }}
+          env:
+            - name: NODE_ENV
+              value: "{{ .Values.configMap.data.NODE_ENV }}"
+            - name: API_URL
+              value: "{{ .Values.configMap.data.API_URL }}"
+          {{- if .Values.secret }}
+          envFrom:
+            - secretRef:
+                name: {{ .Values.secret.name }}
+          {{- end }}

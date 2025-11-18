@@ -1,0 +1,169 @@
+
+- name: Remove accidental .runner directory (prevents daemon failure)
+  ansible.builtin.file:
+    path: "/home/{{ item.user }}/.runner"
+    state: absent
+  loop: "{{ forgejo_runners }}"
+  loop_control:
+    label: "{{ item.name }}"
+  become: yes
+
+- name: Ensure required apt packages are installed
+  ansible.builtin.apt:
+    name: "{{ forgejo_runner__apt_packages }}"
+    state: present
+    update_cache: yes
+
+- name: Ensure log directory exists
+  ansible.builtin.file:
+    path: "{{ forgejo_runner__log_dir }}"
+    state: directory
+    owner: root
+    group: root
+    mode: "0755"
+
+- name: Ensure Prometheus textfile dir exists (if monitoring)
+  ansible.builtin.file:
+    path: "{{ forgejo_runner__prometheus_textfile_dir }}"
+    state: directory
+    owner: root
+    group: root
+    mode: "0755"
+  when: forgejo_runner__prometheus_textfile_dir is defined and forgejo_runner__prometheus_textfile_dir != ""
+
+- name: Copy Forgejo Runner install script
+  ansible.builtin.copy:
+    src: "install_forgejo_runner.sh"
+    dest: "/usr/local/bin/install_forgejo_runner.sh"
+    mode: "0755"
+    owner: root
+    group: root
+
+- name: Copy helper scripts
+  ansible.builtin.copy:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    mode: "0755"
+    owner: root
+    group: root
+  loop:
+    - { src: "unregister_forgejo_runner.sh", dest: "/usr/local/bin/unregister_forgejo_runner.sh" }
+    - { src: "token_refresh.sh", dest: "/usr/local/bin/token_refresh.sh" }
+    - { src: "autoscale_runners.sh", dest: "/usr/local/bin/autoscale_runners.sh" }
+    - { src: "healthcheck_forgejo_runner.sh", dest: "/usr/local/bin/healthcheck_forgejo_runner.sh" }
+
+- name: Copy logrotate config
+  ansible.builtin.copy:
+    src: "forgejo-runner.logrotate"
+    dest: "/etc/logrotate.d/forgejo-runner"
+    owner: root
+    group: root
+    mode: "0644"
+
+# Loop per runner: create user
+- name: Ensure runner user exists
+  ansible.builtin.user:
+    name: "{{ item.user }}"
+    home: "/home/{{ item.user }}"
+    createhome: yes
+    shell: /bin/bash
+  loop: "{{ forgejo_runners }}"
+  loop_control:
+    label: "{{ item.name }}"
+  become: yes
+
+- name: Ensure docker group exists (create if missing)
+  ansible.builtin.group:
+    name: docker
+    state: present
+  become: true
+
+
+# Add to docker group (if present)
+- name: Add runner user to docker group (if docker exists)
+  ansible.builtin.user:
+    name: "{{ item.user }}"
+    groups: docker
+    append: yes
+  loop: "{{ forgejo_runners }}"
+  loop_control:
+    label: "{{ item.name }}"
+  ignore_errors: true
+
+# Sudoers snippet per runner
+- name: Ensure sudoers file for runner user (passwordless NOPASSWD)
+  ansible.builtin.copy:
+    dest: "/etc/sudoers.d/{{ item.user }}"
+    content: "{{ item.user }} ALL=(ALL) NOPASSWD: ALL\n"
+    owner: root
+    group: root
+    mode: "0440"
+  loop: "{{ forgejo_runners }}"
+  loop_control:
+    label: "{{ item.name }}"
+
+# Install & register using install script (idempotent via creates:)
+- name: Ensure runner is installed & registered via install script
+  ansible.builtin.command:
+    argv:
+      - /usr/local/bin/install_forgejo_runner.sh
+      - "{{ (forgejo_runner__token | default('')) }}"
+      - "{{ item.labels | join(',') }}"
+  environment:
+    FORGEJO_USER: "{{ item.user }}"
+    FORGEJO_INSTANCE: "{{ forgejo_runner__instance_address }}"
+    FORGEJO_RUNNER_NAME: "{{ item.name }}"
+  args:
+    creates: "/home/{{ item.user }}/.runner"
+  register: install_result
+  loop: "{{ forgejo_runners }}"
+  loop_control:
+    label: "{{ item.name }}"
+  become: yes
+
+# Install systemd template
+- name: Install systemd template (forgejo-runner@.service)
+  ansible.builtin.template:
+    src: "forgejo-runner@.service.j2"
+    dest: "/etc/systemd/system/{{ forgejo_runner__systemd_template }}"
+    mode: "0644"
+  notify:
+    - systemd-daemon-reload
+
+# Enable and start systemd instance per runner
+- name: Enable and start systemd instance for runner
+  ansible.builtin.systemd:
+    name: "forgejo-runner@{{ item.user }}"
+    enabled: yes
+    state: started
+    daemon_reload: yes
+  loop: "{{ forgejo_runners }}"
+  loop_control:
+    label: "{{ item.name }}"
+  become: yes
+
+- name: Ensure token refresh script is present if enabled
+  ansible.builtin.copy:
+    src: "token_refresh.sh"
+    dest: "/usr/local/bin/token_refresh.sh"
+    mode: "0755"
+  when: forgejo_runner__token_refresh_enabled
+  notify: create-token-refresh-timer
+
+- name: Ensure autoscaler wrapper present if enabled
+  ansible.builtin.copy:
+    content: |
+      #!/bin/bash
+      /usr/local/bin/autoscale_runners.sh
+    dest: /etc/cron.hourly/forgejo-runner-autoscale
+    mode: "0755"
+  when: forgejo_runner__autoscale_enabled
+
+# Run initial healthcheck for each runner (best-effort)
+- name: Run initial healthchecks for each runner (write prometheus file)
+  ansible.builtin.command:
+    cmd: "/usr/local/bin/healthcheck_forgejo_runner.sh {{ item.user }} '{{ item.name }}'"
+  loop: "{{ forgejo_runners }}"
+  loop_control:
+    label: "{{ item.name }}"
+  ignore_errors: yes

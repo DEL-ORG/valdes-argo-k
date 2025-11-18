@@ -1,0 +1,17 @@
+{{- if .Values.networkPolicy.enabled }}
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: {{ include "connect-frontend.fullname" . }}-netpol
+spec:
+  podSelector:
+    matchLabels:
+      app: {{ include "connect-frontend.fullname" . }}
+  policyTypes:
+    - Ingress
+    - Egress
+  ingress:
+{{ toYaml .Values.networkPolicy.ingress | indent 4 }}
+  egress:
+{{ toYaml .Values.networkPolicy.egress | indent 4 }}
+{{- end }}

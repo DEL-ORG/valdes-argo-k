@@ -1,0 +1,11 @@
+{{- if .Values.pdb.enabled }}
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: {{ include "connect-frontend.fullname" . }}-pdb
+spec:
+  minAvailable: {{ .Values.pdb.minAvailable }}
+  selector:
+    matchLabels:
+      app: {{ include "connect-frontend.fullname" . }}
+{{- end }}

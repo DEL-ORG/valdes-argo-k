@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "connect-frontend.fullname" . }}
+  labels:
+    {{ include "connect-frontend.labels" . | indent 4 }}
+spec:
+  type: {{ .Values.service.type | default "ClusterIP" }}
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: {{ .Values.service.port }}
+      protocol: TCP
+      {{- if and (eq .Values.service.type "NodePort") .Values.service.nodeport }}
+      nodePort: {{ .Values.service.nodeport }}
+      {{- end }}
+  selector:
+    app: {{ include "connect-frontend.fullname" . }}

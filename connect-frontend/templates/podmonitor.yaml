@@ -1,0 +1,19 @@
+{{- if and .Values.observability.enabled .Values.observability.podMonitor.enabled }}
+apiVersion: monitoring.coreos.com/v1
+kind: PodMonitor
+metadata:
+  name: {{ include "connect-frontend.fullname" . }}-pm
+spec:
+  selector:
+    matchLabels:
+      app: {{ include "connect-frontend.fullname" . }}
+  podMetricsEndpoints:
+    - path: /metrics
+      interval: {{ .Values.observability.podMonitor.interval | default "30s" }}
+  namespaceSelector:
+    {{- if .Values.observability.podMonitor.namespace }}
+    matchNames: [ "{{ .Values.observability.podMonitor.namespace }}" ]
+    {{- else }}
+    any: true
+    {{- end }}
+{{- end }}

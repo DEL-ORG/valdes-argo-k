@@ -1,0 +1,49 @@
+replicaCount: 2
+
+image:
+  repository: 597088047986.dkr.ecr.us-east-1.amazonaws.com/connect-frontend
+  tag: "staging"
+  pullPolicy: IfNotPresent
+
+imagePullSecrets:
+  - name: ecr-pull-secret
+
+secret:
+  name: connect-frontend-test
+
+serviceAccount:
+  create: true
+  name: frontend-serviceaccount-test
+
+service:
+  type: ClusterIP
+  port: 3000
+
+configMap:
+  enabled: true
+  name: connect-frontend
+  data:
+    NODE_ENV: "staging"
+    API_URL: "https://backend.test.webforxtech.com"
+
+autoscaling:
+  enabled: true
+  minReplicas: 1
+  maxReplicas: 3
+  targetCPUUtilizationPercentage: 60
+
+pdb:
+  enabled: true
+  minAvailable: 1
+
+networkPolicy:
+  enabled: true
+  ingress:
+    - from:
+        - podSelector: {}
+  egress:
+    - to:
+        - podSelector: {}
+
+ingress:
+  enabled: false

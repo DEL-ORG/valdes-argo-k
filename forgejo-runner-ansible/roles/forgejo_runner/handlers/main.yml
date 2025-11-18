@@ -1,0 +1,33 @@
+---
+- name: systemd-daemon-reload
+  ansible.builtin.command:
+    cmd: systemctl daemon-reload
+  become: yes
+
+- name: restart-runner
+  ansible.builtin.systemd:
+    name: "{{ ansible_facts['invocation']['module_args']['name'] | default('forgejo-runner@' + item.user) }}"
+    state: restarted
+  become: yes
+
+- name: create-token-refresh-timer
+  ansible.builtin.copy:
+    dest: /etc/systemd/system/forgejo-runner-token-refresh.timer
+    content: |
+      [Unit]
+      Description=Forgejo Runner Token Refresh Timer
+
+      [Timer]
+      OnBootSec=5min
+      OnUnitActiveSec={{ forgejo_runner__token_refresh_interval }}
+      Persistent=true
+
+      [Install]
+      WantedBy=timers.target
+  notify: token-refresh-service-reload
+  become: yes
+
+- name: token-refresh-service-reload
+  ansible.builtin.command:
+    cmd: systemctl daemon-reload && systemctl enable --now forgejo-runner-token-refresh.timer
+  become: yes

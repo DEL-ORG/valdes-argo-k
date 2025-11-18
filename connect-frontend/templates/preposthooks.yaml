@@ -1,0 +1,9 @@
+{{- if .Values.lifecycle.enabled }}
+# This fragment is referenced in the deployment container spec to add lifecycle hooks.
+# To use: include the lifecycle block in the container spec or set lifecycle.enabled true.
+lifecycle:
+{{- if .Values.lifecycle.preStop }}
+  preStop:
+{{ toYaml .Values.lifecycle.preStop | indent 4 }}
+{{- end }}
+{{- end }}

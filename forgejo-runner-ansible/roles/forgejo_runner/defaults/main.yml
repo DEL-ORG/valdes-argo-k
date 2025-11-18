@@ -1,0 +1,56 @@
+---
+# Basic behavior / versions
+forgejo_runner__version: 'latest'
+forgejo_runner__user: 'forgejo-runner'
+forgejo_runner__group: 'forgejo-runner'
+forgejo_runner__user_home: '/home/forgejo-runner'
+forgejo_runner__name: dev_runner
+forgejo_runner__full_executable_path: '/usr/local/bin/forgejo-runner'
+forgejo_runner__gpg_id: 'EB114F5E6C0DC2BCDD183550A4B61A2DC5923710'
+
+forgejo_runner__instance_address: 'https://git.edusuc.net/'
+# Preferred token source: store in Vault and provide here, or leave empty to force dynamic fetch
+forgejo_runner__token: ""                  # override with vault lookups in playbook
+# forgejo_runner__token_vault_path: ""       # optional: e.g. "secret/data/ci/forgejo-runner-token"
+forgejo_runner__mode: "daemon"
+forgejo_runner__offline_registration: false
+
+# Runner list (you provided these — we use same structure)
+forgejo_runners:
+  - name: "connect-deploy-sandbox-1"
+    user: "connect-deploy-sandbox-1"
+    labels: ["sandbox"]
+
+  - name: "connect-deploy-sandbox-2"
+    user: "connect-deploy-sandbox-2"
+    labels: ["sandbox"]
+
+# --- Token management / rotation ---
+forgejo_runner__token_refresh_enabled: true
+forgejo_runner__token_refresh_interval: "24h"   # systemd timer frequency (human-friendly string for template)
+# If using API to rotate tokens, set a command that returns the token; otherwise use vault variable above.
+forgejo_runner__token_refresh_cmd: ""           # e.g. "/usr/local/bin/fetch_forgejo_token.sh"
+
+# --- Autoscaling (local/basic) ---
+forgejo_runner__autoscale_enabled: true
+forgejo_runner__autoscale_min: 1
+forgejo_runner__autoscale_max: 5
+forgejo_runner__autoscale_check_interval: 60   # seconds between checks in autoscaler
+# Scale up when number of pending jobs > threshold; this is a best-effort local scaler.
+forgejo_runner__autoscale_pending_threshold: 5
+
+# --- Logging & monitoring ---
+forgejo_runner__log_dir: /var/log/forgejo-runner
+forgejo_runner__prometheus_textfile_dir: /var/lib/node_exporter/textfile_collector
+forgejo_runner__healthcheck_interval: 60   # seconds, used by cron or systemd timer in future
+
+# --- Install prerequisites ---
+forgejo_runner__apt_packages:
+  - jq
+  - curl
+  - wget
+  - gnupg
+  - ca-certificates
+
+# --- Systemd / instance template ---
+forgejo_runner__systemd_template: "forgejo-runner@.service"

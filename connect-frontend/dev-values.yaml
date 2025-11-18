@@ -1,0 +1,72 @@
+replicaCount: 1
+
+image:
+  repository: 597088047986.dkr.ecr.us-east-1.amazonaws.com/connect-frontend
+  tag: "latest"
+  pullPolicy: IfNotPresent
+
+imagePullSecrets:
+  - name: ecr-pull-secret
+
+secret:
+  name: connect-frontend-dev
+
+serviceAccount:
+  create: true
+  name: frontend-serviceaccount-dev
+
+service:
+  type: ClusterIP
+  port: 3000
+
+readinessProbe:
+  httpGet:
+    path: /
+    port: 3000
+  initialDelaySeconds: 5
+  periodSeconds: 5
+  timeoutSeconds: 3
+  failureThreshold: 3
+
+livenessProbe:
+  httpGet:
+    path: /
+    port: 3000
+  initialDelaySeconds: 10
+  periodSeconds: 10
+  timeoutSeconds: 3
+  failureThreshold: 3
+
+securityContext:
+  enabled: true
+  runAsUser: 1000
+  runAsGroup: 3000
+  fsGroup: 2000
+  allowPrivilegeEscalation: false
+
+resources:
+  limits:
+    cpu: 250m
+    memory: 128Mi
+  requests:
+    cpu: 100m
+    memory: 64Mi
+
+networkPolicy:
+  enabled: false
+
+configMap:
+  enabled: true
+  name: connect-frontend
+  data:
+    NODE_ENV: "development"
+    API_URL: "http://backend.dev.local"
+
+autoscaling:
+  enabled: false
+
+pdb:
+  enabled: false
+
+ingress:
+  enabled: false

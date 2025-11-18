@@ -1,0 +1,22 @@
+{{- if and .Values.observability.enabled .Values.observability.serviceMonitor.enabled }}
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ include "connect-frontend.fullname" . }}-sm
+  labels:
+    release: prometheus
+spec:
+  selector:
+    matchLabels:
+      app: {{ include "connect-frontend.fullname" . }}
+  endpoints:
+    - port: http
+      interval: {{ .Values.observability.serviceMonitor.interval | default "30s" }}
+      scrapeTimeout: {{ .Values.observability.serviceMonitor.scrapeTimeout | default "10s" }}
+  namespaceSelector:
+    {{- if .Values.observability.serviceMonitor.namespace }}
+    matchNames: [ "{{ .Values.observability.serviceMonitor.namespace }}" ]
+    {{- else }}
+    any: true
+    {{- end }}
+{{- end }}

@@ -1,0 +1,4 @@
+Thank you for installing {{ .Chart.Name }}.
+Use these commands to check status:
+  kubectl get deploy -l app={{ include "connect-frontend.fullname" . }}
+  kubectl get svc {{ include "connect-frontend.fullname" . }}

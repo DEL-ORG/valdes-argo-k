@@ -1,0 +1,12 @@
+---
+- name: Deploy Forgejo Runners
+  hosts: runners
+  become: true
+  gather_facts: true
+
+  vars_files:
+  - vault.yml
+
+
+  roles:
+    - role: forgejo_runner

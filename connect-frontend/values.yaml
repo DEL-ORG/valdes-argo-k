@@ -1,0 +1,150 @@
+replicaCount: 3
+
+image:
+  repository: 597088047986.dkr.ecr.us-east-1.amazonaws.com/connect-frontend
+  tag: "76fb"
+  pullPolicy: IfNotPresent
+
+imagePullSecrets:
+  - name: ecr-pull-secret
+
+secret:
+  name: connect-frontend
+
+serviceAccount:
+  create: true
+  name: frontend-serviceaccount
+
+service:
+  type: NodePort
+  port: 3000
+  nodeport: 30726
+
+readinessProbe:
+  httpGet:
+    path: /
+    port: 3000
+  initialDelaySeconds: 10
+  periodSeconds: 10
+  timeoutSeconds: 5
+  failureThreshold: 3
+
+livenessProbe:
+  httpGet:
+    path: /
+    port: 3000
+  initialDelaySeconds: 15
+  periodSeconds: 20
+  timeoutSeconds: 5
+  failureThreshold: 3
+
+securityContext:
+  enabled: true
+  runAsUser: 1000
+  runAsGroup: 3000
+  fsGroup: 2000
+  allowPrivilegeEscalation: false
+
+resources:
+  limits:
+    cpu: 500m
+    memory: 256Mi
+  requests:
+    cpu: 250m
+    memory: 128Mi
+
+networkPolicy:
+  enabled: true
+  ingress:
+    - from:
+        - podSelector: {}
+  egress:
+    - to:
+        - podSelector: {}
+
+configMap:
+  enabled: true
+  name: connect-frontend
+  data:
+    NODE_ENV: "production"
+    API_URL: "https://backend.prod.webforxtech.com"
+
+autoscaling:
+  enabled: true
+  minReplicas: 2
+  maxReplicas: 5
+  targetCPUUtilizationPercentage: 70
+
+pdb:
+  enabled: true
+  minAvailable: 2
+
+ingress:
+  enabled: true
+  className: "nginx"
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+  hosts:
+    - host: frontend.prod.webforxtech.com
+      paths:
+        - path: /
+          pathType: Prefix
+  tls:
+    - secretName: prod-tls-secret
+      hosts:
+        - frontend.prod.webforxtech.com
+
+
+
+
+
+# Observability (Prometheus Operator) toggles
+observability:
+  enabled: false
+  serviceMonitor:
+    enabled: false
+    namespace: ""          # optional namespace for ServiceMonitor
+    interval: 30s
+    scrapeTimeout: 10s
+  podMonitor:
+    enabled: false
+    namespace: ""
+    interval: 30s
+  prometheusRule:
+    enabled: false
+    groups: []             # add custom alert rules here
+
+# RBAC
+rbac:
+  create: true
+  useClusterRole: false    # if true, create ClusterRole + ClusterRoleBinding; else Role+RoleBinding in release namespace
+
+# Storage
+persistence:
+  enabled: false
+  accessMode: ReadWriteOnce
+  size: 1Gi
+  storageClass: ""
+
+# External secret placeholder (e.g. ExternalSecrets, SealedSecrets)
+externalSecret:
+  enabled: false
+  name: connect-frontend-external
+
+# Lifecycle hooks
+lifecycle:
+  enabled: false
+  preStop:
+    exec:
+      command: ["/bin/sh","-c","sleep 5"]
+
+# CronJob example (cache warm-up)
+cronJob:
+  enabled: false
+  schedule: "0 */6 * * *"
+  image:
+    repository: 597088047986.dkr.ecr.us-east-1.amazonaws.com/connect-frontend
+    tag: "76fb"
+  imagePullPolicy: IfNotPresent
+  command: ["/bin/sh","-c","curl -sS http://localhost:3000/health || true"]
+  restartPolicy: OnFailure
